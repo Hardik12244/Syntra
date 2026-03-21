@@ -3,10 +3,12 @@ dotenv.config();
 import express, { Request, Response } from "express";
 import connectDB from "./connect";
 import userRoutes from './routes/user'
+import postRoutes from "./routes/post";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use('/api',userRoutes);
+app.use('/post',postRoutes);
 
 async function server() {
     try {
@@ -20,10 +22,6 @@ async function server() {
     }
 
 }
-
 server();
 
-app.get('/', (req:Request, res:Response) => {
-    res.json("hi");
-})
 
