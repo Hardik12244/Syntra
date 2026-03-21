@@ -4,6 +4,7 @@ import connectDB from "./connect";
 import userRoutes from './routes/user'
 import postRoutes from "./routes/post";
 import crushRoutes from "./routes/crush";
+import matchRoutes from "./routes/match";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 app.use('/user',userRoutes);
 app.use('/post',postRoutes);
 app.use("/crush", crushRoutes);
+app.use("/match", matchRoutes);
 
 async function server() {
     try {
