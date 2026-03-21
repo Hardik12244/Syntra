@@ -5,12 +5,12 @@ const postRouter = Router();
 
 postRouter.get('/', getPosts)
 
-postRouter.get('/post/:id', getPost)
+postRouter.get('/:id', getPost)
 
-postRouter.post('/post',createPost)
+postRouter.post('/',createPost)
 
-postRouter.patch('/post/:id',updatePost)
+postRouter.patch('/:id',updatePost)
 
-postRouter.delete('/post/:id',deletePost)
+postRouter.delete('/:id',deletePost)
 
 export default postRouter;

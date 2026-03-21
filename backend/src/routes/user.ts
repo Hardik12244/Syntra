@@ -3,10 +3,10 @@ import { createUser, getUser, updateUser } from "../controllers/user";
 
 const userRouter = Router();
 
-userRouter.post('/user',createUser)
+userRouter.post('/',createUser)
 
-userRouter.get('/user/:id', getUser)
+userRouter.get('/:id', getUser)
 
-userRouter.patch('/user/:id',updateUser)
+userRouter.patch('/:id',updateUser)
 
 export default userRouter;
