@@ -4,7 +4,7 @@ interface Post extends Document {
     user: mongoose.Types.ObjectId,
     caption: string,
     image: string,
-    likes:mongoose.Types.ObjectId,
+    likes:mongoose.Types.ObjectId[],
 }
 
 const postSchema = new mongoose.Schema<Post>({
