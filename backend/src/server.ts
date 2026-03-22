@@ -5,12 +5,15 @@ import userRoutes from './routes/user'
 import postRoutes from "./routes/post";
 import crushRoutes from "./routes/crush";
 import matchRoutes from "./routes/match";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors());
+app.use(express.json());
 app.use('/user',userRoutes);
 app.use('/post',postRoutes);
 app.use("/crush", crushRoutes);

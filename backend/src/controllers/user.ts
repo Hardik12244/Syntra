@@ -2,6 +2,7 @@ import User from "../models/user";
 import { Request,Response } from "express";
 
 async function createUser(req:Request,res:Response){
+    console.log("BODY:", req.body);
     try {
             const data = req.body
             if (!data.phoneNo || !data.interests || !data.intent) {
@@ -22,6 +23,7 @@ async function createUser(req:Request,res:Response){
             })
             res.status(201).json(user)
         } catch (error) {
+            console.log(error);
             res.status(500).json({ msg: "error aagya jiiii" })
         }
 }

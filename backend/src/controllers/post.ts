@@ -1,6 +1,6 @@
 import Post from "../models/post";
 import { Request, Response } from "express";
-
+import mongoose from "mongoose";
 
 async function createPost(req: Request, res: Response) {
     try {
@@ -79,21 +79,29 @@ async function getPosts(req: Request, res: Response) {
 async function toggleLike(req: Request, res: Response) {
     try {
         const id = req.params.id;
-        const user = req.body;
+        const { userId } = req.body;
+        console.log(req.body)
         const post = await Post.findOne({
             _id: id,
         })
+        console.log(post);
+
         if (!post) {
             return res.status(404).json({ msg: "Post does not exist" })
         }
-        const alreadyLiked = post.likes.some((id) => id.toString() === user);
-        if (alreadyLiked) {
+        
+        const userObjectId = new mongoose.Types.ObjectId(userId);
+
+        const alreadyLiked = post.likes.some((like) =>
+            like?.equals(userObjectId));
+
+         if (alreadyLiked) {
             post.likes = post.likes.filter(
-                (id) => id.toString() !== user
-            );
+                (like) => !like?.equals(userObjectId));
         } else {
-            post.likes.push(user);
+            post.likes.push(userObjectId);
         }
+
         await post.save();
         res.status(200).json(post);
     } catch (error) {
@@ -101,4 +109,4 @@ async function toggleLike(req: Request, res: Response) {
     }
 }
 
-export { getPost, createPost, updatePost, deletePost, getPosts }
+export { getPost, createPost, updatePost, deletePost, getPosts, toggleLike }

@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { createPost, deletePost, getPost,getPosts,updatePost } from "../controllers/post";
+import { createPost, deletePost, getPost,getPosts,toggleLike,updatePost } from "../controllers/post";
 
 const postRouter = Router();
 
 postRouter.get('/', getPosts)
 
 postRouter.get('/:id', getPost)
+
+postRouter.post('/:id/like', toggleLike)
 
 postRouter.post('/',createPost)
 
