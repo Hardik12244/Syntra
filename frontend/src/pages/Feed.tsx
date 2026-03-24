@@ -1,16 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import PostCard from '../components/PostCard'
 
-type Post = {
-    _id: string,
-    caption: string,
-    image: string,
-    likes: string[],
-    user: {
-        _id: string,
-        name: string,
-    }
-}
+import type { Post } from "../types/Post";
 
 function Feed() {
 
@@ -41,7 +33,7 @@ function Feed() {
                 } else {
                     return {
                         ...e,
-                        likes:[...e.likes,userId],
+                        likes: [...e.likes, userId],
                     }
                 }
             }
@@ -54,20 +46,15 @@ function Feed() {
         })
     }
 
-    return (
-        <div>
-            <div>
-                {posts.map((e, index) => {
-                    return (
-                        <div key={index}>
-                            <div>{e.user.name}</div>
-                            <div>{e.caption}</div>
-                            <div>{e.image}</div>
-                            <div> <button onClick={() => likeButton(e._id)}>Like</button>
-                                {e.likes.length}</div>
-                        </div>
-                    )
+    
 
+    return (
+        <div className='flex grid grid-cols-3 justify-center align-middle min-h-screen '>
+            <div className='col-start-2 justify-center align-middle mt-24 bg-[#FFF7F9] rounded-3xl flex flex-col gap-6'>
+                {posts.map((e) => {
+                    return(
+                        <PostCard e={e} onLike={likeButton}/>
+                    )
                 })}
             </div>
         </div>
