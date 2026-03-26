@@ -50,7 +50,7 @@ function Feed() {
 
     return (
         <div className='flex grid grid-cols-3 justify-center align-middle min-h-screen '>
-            <div className='col-start-2 justify-center align-middle mt-24 bg-[#FFF7F9] rounded-3xl flex flex-col gap-6'>
+            <div className='col-start-2 justify-center align-middle mt-24 bg-[#FFF7F9] rounded-3xl flex flex-col gap-6 border border-neutral-200'>
                 {posts.map((e) => {
                     return(
                         <PostCard e={e} onLike={likeButton}/>

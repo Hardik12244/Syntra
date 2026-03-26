@@ -8,8 +8,8 @@ export default function PostCard({ e, onLike }: PostCard) {
     const isLiked = e.likes.includes(userId)
 
     return (
-        <div className="p-4 text-wrap">
-            <div className="m-4 hover:shadow-md transition hover:scale-105 duration-60 hover:-translate-y-1 shadow-md  w-full mx-auto bg-white rounded-2xl">
+        <div className="p-4 text-wrap ">
+            <div className="m-4 shadow-black/10 ring-1 ring-black/10  hover:shadow-lg transition hover:scale-105 duration-100 hover:-translate-y-1 shadow-md  w-full mx-auto bg-white rounded-2xl">
                 <img src={e.image} className="w-full h-64 object-cover mb-2 rounded-2xl" alt="" />
 
                 <div className="p-2">

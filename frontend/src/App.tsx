@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Feed from './pages/Feed'
+import CreateUser from './components/CreateUser';
 
 function App() {
-
   const[userId,setUserId] = useState<string|null>(null);
 
   useEffect(()=>{
@@ -16,9 +16,8 @@ function App() {
   return (
     <>
     <div>
-    {userId ? "User exists" : "No user"}
+    {userId ? <Feed/> : <CreateUser setUserId={setUserId}/>}
     </div>
-    <Feed/>
     </>
   )
 }
