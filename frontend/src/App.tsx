@@ -16,7 +16,7 @@ function App() {
   return (
     <>
     <div>
-    {userId ? <Feed/> : <CreateUser setUserId={setUserId}/>}
+    {userId ? <Feed userId={userId}/> : <CreateUser setUserId={setUserId}/>}
     </div>
     </>
   )

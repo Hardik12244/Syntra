@@ -1,10 +1,12 @@
 import type { Post } from "../types/Post";
 type PostCard = {
     e: Post,
-    onLike: (id: string) => void
+    onLike: (id: string) => void,
+    userId: string;
+
 }
-export default function PostCard({ e, onLike }: PostCard) {
-    const userId = "69bfa985637c6b49b02cbb05";
+
+export default function PostCard({ e, onLike, userId }:PostCard ) {
     const isLiked = e.likes.includes(userId)
 
     return (
