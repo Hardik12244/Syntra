@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createPost, deletePost, getPost,getPosts,toggleLike,updatePost } from "../controllers/post";
+import { upload } from "../multer";
 
 const postRouter = Router();
 
@@ -9,7 +10,7 @@ postRouter.get('/:id', getPost)
 
 postRouter.post('/:id/like', toggleLike)
 
-postRouter.post('/',createPost)
+postRouter.post('/',upload.single("media"),createPost)
 
 postRouter.patch('/:id',updatePost)
 

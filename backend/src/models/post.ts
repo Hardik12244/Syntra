@@ -3,7 +3,7 @@ import mongoose, { Document} from "mongoose";
 interface Post extends Document {
     user: mongoose.Types.ObjectId,
     caption: string,
-    image: string,
+    media: string,
     likes:mongoose.Types.ObjectId[],
 }
 
@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema<Post>({
         type: String,
         required: true,
     },
-    image: {
+    media: {
         type: String,
     },
     likes: [

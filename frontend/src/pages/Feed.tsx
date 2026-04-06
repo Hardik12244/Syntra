@@ -11,7 +11,7 @@ function Feed({ userId }: Props) {
 
     const [posts, setPosts] = useState<Post[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-    const [image, setImage] = useState<string>("")
+    const [file, setFile] = useState<File | null>(null);
     const [caption, setCaption] = useState<string>("")
 
     useEffect(() => {
@@ -49,20 +49,20 @@ function Feed({ userId }: Props) {
         })
     }
 
-     function addPost() {
+    function addPost() {
 
-         axios.post(`http://localhost:3000/post/`, {
-            user:userId,
+        axios.post(`http://localhost:3000/post/`, {
+            user: userId,
             caption,
             image
         }).then((res) => {
             console.log("post uploaded")
             setIsOpen(false);
             axios.get("http://localhost:3000/post")
-            .then((res) => {
-                console.log(res.data);
-                setPosts(res.data)
-            })
+                .then((res) => {
+                    console.log(res.data);
+                    setPosts(res.data)
+                })
         })
 
     }
@@ -73,7 +73,12 @@ function Feed({ userId }: Props) {
             <div className={`${isOpen ? "block" : "hidden"} flex col-start-2 mt-24 rounded-2xl border border-neutral-200 justify-center align-middle`}>
                 <div className='flex flex-col gap-4 mt-8 mb-4 '>
                     <button className='ml-auto mb-auto' onClick={() => setIsOpen(false)}>X</button>
-                    <input value={image} onChange={(e) => setImage(e.target.value)} className='bg-neutral-200 w-64 rounded-xl p-2' type="file" placeholder='image' />
+                    <input onChange={(e) => {
+                        const files = e.target.files;
+                        if (files && files.length > 0) {
+                            setFile(files[0]);
+                        }
+                    }} className='bg-neutral-200 w-64 rounded-xl p-2' type="file" placeholder='File' />
                     <input value={caption} onChange={(e) => setCaption(e.target.value)} className='bg-neutral-200 w-64 rounded-xl p-2' type="text" placeholder='caption' />
                     <button onClick={() => addPost()}>Upload</button>
                 </div>
