@@ -4,6 +4,7 @@ interface Post extends Document {
     user: mongoose.Types.ObjectId,
     caption: string,
     media: string,
+    mediaType: string,
     likes:mongoose.Types.ObjectId[],
 }
 
@@ -19,6 +20,9 @@ const postSchema = new mongoose.Schema<Post>({
     },
     media: {
         type: String,
+    },
+    mediaType:{
+        type:String,
     },
     likes: [
         {

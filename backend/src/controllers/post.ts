@@ -5,12 +5,15 @@ import mongoose from "mongoose";
 async function createPost(req: Request, res: Response) {
     try {
         const { user, caption, image } = req.body;
-        const media = req.file?.path
+        const media = req.file?.path;
+        const mediaType = req.file?.mimetype;
+
         if (!user || !caption) return res.status(400).json({ msg: "caption required" });
         const post = await Post.create({
             user,
             caption,
-            media
+            media,
+            mediaType
         })
         res.status(201).json(post)
     } catch (error) {
