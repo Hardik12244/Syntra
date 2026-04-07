@@ -94,7 +94,7 @@ function Feed({ userId }: Props) {
                 })}
             </div>
             <div className='fixed bottom-30 right-100'>
-                <button onClick={() => setIsOpen(true)}>Post</button>
+                <button className='bg-blue-400 rounded-2xl px-3 py-1 text-xl hover:scale-115 duration-100 scroll-smooth ' onClick={() => setIsOpen(true)}>Post</button>
             </div>
 
 

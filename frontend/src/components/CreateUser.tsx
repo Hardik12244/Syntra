@@ -9,8 +9,8 @@ export default function CreateUser({ setUserId }: Props) {
 
     const [name, setName] = useState<string>("")
     const [phoneNo, setPhoneNo] = useState<string>("")
+    const [email, setEmail] = useState<string>("")
     const [college, setCollege] = useState<string>("")
-    const [intent, setIntent] = useState<string>("")
     const [interestsInput, setInterestsInput] = useState<string>("");
 
     function addUser() {
@@ -21,9 +21,10 @@ export default function CreateUser({ setUserId }: Props) {
         axios.post("http://localhost:3000/user", {
             name,
             phoneNo,
+            email,
             college,
             interests,
-            intent
+            
         })
             .then((res) => {
                 console.log(res.data);
@@ -44,17 +45,16 @@ export default function CreateUser({ setUserId }: Props) {
             })
     }
 
-    return <div>Create User Screen
+    return <div>
 
-        <div>
-            <h1>Login</h1>
+        <div className="flex flex-col gap-3 justify-center items-center mt-14">
             <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="enter name" />
             <input value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} type="text" placeholder="enter phoneNo" />
             <input value={college} onChange={(e) => setCollege(e.target.value)} type="text" placeholder="enter College" />
-            <input value={intent} onChange={(e) => setIntent(e.target.value)} type="text" placeholder="enter Intent" />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" placeholder="enter email" />
             <input value={interestsInput} onChange={(e) => setInterestsInput(e.target.value)} type="text" placeholder="coding, gym, music"
             />
-            <button onClick={addUser}>Done</button>
+            <button className="bg-blue-400" onClick={addUser}>Done</button>
         </div>
 
     </div>;
