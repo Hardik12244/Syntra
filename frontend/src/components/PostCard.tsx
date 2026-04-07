@@ -1,56 +1,72 @@
 import type { Post } from "../types/Post";
-type PostCard = {
-    e: Post,
-    onLike: (id: string) => void,
-    userId: string;
 
-}
+type PostCardProps = {
+  e: Post;
+  onLike: (id: string) => void;
+  userId: string;
+};
 
-export default function PostCard({ e, onLike, userId }: PostCard) {
-    const isLiked = e.likes.includes(userId)
+export default function PostCard({ e, onLike, userId }: PostCardProps) {
+  const isLiked = e.likes.includes(userId);
 
-    return (
-        <div className="p-4 text-wrap ">
-            <div className="m-4 shadow-black/10 ring-1 ring-black/10  hover:shadow-lg transition hover:scale-105 duration-100 hover:-translate-y-1 shadow-md  w-full mx-auto bg-white rounded-2xl">
-                {e.mediaType?.startsWith("image/") ? (
-                    <img 
-                    src={`http://localhost:3000/${e.media}`} 
-                    className="w-full h-64 object-cover mb-2 rounded-2xl" 
-                    alt="" />) : e.mediaType?.startsWith("video/") ? (
-                    <video
-                        src={`http://localhost:3000/${e.media}`}
-                        controls
-                        className="w-full h-64 object-cover mb-2 rounded-2xl"
-                    />
-                ) : null
-                }
+  return (
+    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">
 
-                <div className="p-2">
-                    <div className="  text-2xl font-bold mb-2">{e.user.name}</div>
-                    <div className=" flex gap-6 text-xl mb-2">
-                        <div className="flex items-center gap-1">
-                            <button className="mr-1 cursor-pointer transition hover:scale-110 duration-200" onClick={() => onLike(e._id)}>
-                                {isLiked ? "❤️" : "♡"}
-                            </button>
-                            {e.likes.length}
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <button className="mr-1 cursor-pointer transition hover:scale-110 duration-200" onClick={() => onLike(e._id)}>💬</button>
-                            {e.likes.length}
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <button className="mr-1 cursor-pointer transition hover:scale-110 duration-200" onClick={() => onLike(e._id)}>🔁</button>
-                            {e.likes.length}
-                        </div>
-
-                    </div>
-                    <div className="text-sm break-words whitespace-normal">{e.caption}</div>
-                </div>
-
-
-            </div>
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600">
+          {e.user.name[0]}
         </div>
+        <div className="font-medium text-gray-800">
+          {e.user.name}
+        </div>
+      </div>
 
-    )
+      {/* Media */}
+      {e.mediaType?.startsWith("image/") ? (
+        <img
+          src={`http://localhost:3000/${e.media}`}
+          className="w-full h-64 object-cover rounded-lg mb-3"
+          alt=""
+        />
+      ) : e.mediaType?.startsWith("video/") ? (
+        <video
+          src={`http://localhost:3000/${e.media}`}
+          controls
+          className="w-full h-64 object-cover rounded-lg mb-3"
+        />
+      ) : null}
+
+      {/* Actions */}
+      <div className="flex items-center gap-6 text-gray-600 mb-2 text-sm">
+
+        <button
+          onClick={() => onLike(e._id)}
+          className={`flex items-center gap-1 transition ${
+            isLiked ? "text-pink-500" : "hover:text-pink-500"
+          }`}
+        >
+          {isLiked ? "❤️" : "♡"}
+          <span>{e.likes.length}</span>
+        </button>
+
+        <button className="flex items-center gap-1 hover:text-pink-500 transition">
+          💬 <span>0</span>
+        </button>
+
+        <button className="flex items-center gap-1 hover:text-pink-500 transition">
+          🔁 
+        </button>
+
+      </div>
+
+      {/* Caption */}
+      {e.caption && (
+        <p className="text-gray-700 text-sm leading-relaxed">
+          {e.caption}
+        </p>
+      )}
+
+    </div>
+  );
 }
-

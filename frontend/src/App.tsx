@@ -26,7 +26,7 @@ function App() {
     <>
       <div>
         <Navbar user={user} setUser={setUser} />
-        {user ? <Feed userId={user._id} /> : <div>Please login</div>}      
+        {user ? <Feed userId={user._id} /> : <div className='flex justify-center items-center text-2xl'>Please login</div>}      
         </div>
     </>
   )

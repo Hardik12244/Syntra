@@ -51,55 +51,102 @@ function Feed({ userId }: Props) {
 
     function addPost() {
         const formData = new FormData();
-        formData.append("user",userId);
-        formData.append("caption",caption);
+        formData.append("user", userId);
+        formData.append("caption", caption);
         if (!file) return;
-        formData.append("media",file)
-        axios.post(`http://localhost:3000/post/`,formData)
-        .then((res) => {
-            console.log("post uploaded")
-            setIsOpen(false);
-            axios.get("http://localhost:3000/post")
-                .then((res) => {
-                    console.log(res.data);
-                    setPosts(res.data)
-                })
-        })
+        formData.append("media", file)
+        axios.post(`http://localhost:3000/post/`, formData)
+            .then((res) => {
+                console.log("post uploaded")
+                setIsOpen(false);
+                axios.get("http://localhost:3000/post")
+                    .then((res) => {
+                        console.log(res.data);
+                        setPosts(res.data)
+                    })
+            })
 
     }
 
 
     return (
-        <div className={`flex grid grid-cols-3 justify-center align-middle min-h-screen`}>
-            <div className={`${isOpen ? "block" : "hidden"} flex col-start-2 mt-24 rounded-2xl border border-neutral-200 justify-center align-middle`}>
-                <div className='flex flex-col gap-4 mt-8 mb-4 '>
-                    <button className='ml-auto mb-auto' onClick={() => setIsOpen(false)}>X</button>
-                    <input onChange={(e) => {
-                        const files = e.target.files;
-                        if (files && files.length > 0) {
-                            setFile(files[0]);
-                        }
-                    }} className='bg-neutral-200 w-64 rounded-xl p-2' type="file" placeholder='File' />
-                    <input value={caption} onChange={(e) => setCaption(e.target.value)} className='bg-neutral-200 w-64 rounded-xl p-2' type="text" placeholder='caption' />
-                    <button onClick={() => addPost()}>Upload</button>
-                </div>
-            </div>
+  <div className="min-h-screen bg-gray-50">
 
-            <div className={`${isOpen ? "blur-sm" : ""} col-start-2 justify-center align-middle mt-24 bg-[#FFF7F9] rounded-3xl flex flex-col gap-6 border border-neutral-200`}>
+    {/* Modal */}
+    {isOpen && (
+      <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+        <div className="bg-white rounded-2xl p-6 shadow-lg w-80">
+          
+          <button
+            className="ml-auto block mb-4 text-gray-500 hover:text-black"
+            onClick={() => setIsOpen(false)}
+          >
+            ✕
+          </button>
 
-                {posts.map((e) => {
-                    return (
-                        <PostCard key={e._id} e={e} onLike={likeButton} userId={userId} />
-                    )
-                })}
-            </div>
-            <div className='fixed bottom-30 right-100'>
-                <button className='bg-blue-400 rounded-2xl px-3 py-1 text-xl hover:scale-115 duration-100 scroll-smooth ' onClick={() => setIsOpen(true)}>Post</button>
-            </div>
+          <div className="flex flex-col gap-4">
+            <input
+              type="file"
+              onChange={(e) => {
+                const files = e.target.files;
+                if (files && files.length > 0) {
+                  setFile(files[0]);
+                }
+              }}
+              className="bg-gray-100 rounded-lg p-2"
+            />
 
+            <input
+              type="text"
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              placeholder="Write a caption..."
+              className="bg-gray-100 rounded-lg p-2"
+            />
+
+            <button
+              onClick={addPost}
+              className="bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2 rounded-lg hover:opacity-90"
+            >
+              Upload
+            </button>
+          </div>
 
         </div>
-    )
+      </div>
+    )}
+
+    {/* Feed */}
+    <div className="flex justify-center pt-24">
+      
+      <div className="w-[33%] space-y-4">
+
+        {posts.map((e) => (
+          <PostCard
+            key={e._id}
+            e={e}
+            onLike={likeButton}
+            userId={userId}
+          />
+        ))}
+
+      </div>
+
+    </div>
+
+    {/* Floating Button */}
+    <button
+      className="fixed bottom-6 right-6 z-40 
+      bg-gradient-to-r from-pink-500 to-purple-500 
+      text-white rounded-full w-14 h-14 
+      flex items-center justify-center shadow-lg hover:scale-105 transition"
+      onClick={() => setIsOpen(true)}
+    >
+      +
+    </button>
+
+  </div>
+);
 }
 
 export default Feed
