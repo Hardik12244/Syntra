@@ -89,7 +89,7 @@ function Feed({ userId }: Props) {
 
                 {posts.map((e) => {
                     return (
-                        <PostCard e={e} onLike={likeButton} userId={userId} />
+                        <PostCard key={e._id} e={e} onLike={likeButton} userId={userId} />
                     )
                 })}
             </div>

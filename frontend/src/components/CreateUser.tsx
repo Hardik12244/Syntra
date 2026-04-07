@@ -31,6 +31,17 @@ export default function CreateUser({ setUserId }: Props) {
                 localStorage.setItem("userId", id);
                 setUserId(id);
             })
+            .catch(async (err) => {
+                if (err.response?.status === 409) {
+                    console.log("User exists, logging in...");
+                    
+                    const res = await axios.get(`http://localhost:3000/user/phone/${phoneNo}`);
+
+                    const id = res.data._id;
+                    localStorage.setItem("userId", id);
+                    setUserId(id);
+                }
+            })
     }
 
     return <div>Create User Screen

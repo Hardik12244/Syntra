@@ -37,12 +37,26 @@ async function getUser(req:Request,res:Response){
         if (!user) {
             return res.status(404).json({ msg: "User does not exist" })
         }
-        res.status(200).json({ user });
+        res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ msg: "Server error" });
     }
 }
+async function getUserByPhone(req: Request, res: Response) {
+    try {
+        const phoneNo = req.params.phoneNo;
 
+        const user = await User.findOne({ phoneNo });
+
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ msg: "Server error" });
+    }
+}
 async function updateUser(req:Request,res:Response){
     try {
         const id = req.params.id;
@@ -61,4 +75,4 @@ async function updateUser(req:Request,res:Response){
     }
 }
 
-export {getUser,createUser,updateUser}
+export {getUser,createUser,updateUser,getUserByPhone}
