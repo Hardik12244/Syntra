@@ -1,7 +1,7 @@
 export type Post = {
     _id: string,
     caption: string,
-    file: string,
+    media: string,
     likes: string[],
     user: {
         _id: string,

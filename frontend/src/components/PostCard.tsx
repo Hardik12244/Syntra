@@ -12,7 +12,7 @@ export default function PostCard({ e, onLike, userId }:PostCard ) {
     return (
         <div className="p-4 text-wrap ">
             <div className="m-4 shadow-black/10 ring-1 ring-black/10  hover:shadow-lg transition hover:scale-105 duration-100 hover:-translate-y-1 shadow-md  w-full mx-auto bg-white rounded-2xl">
-                <img src={e.image} className="w-full h-64 object-cover mb-2 rounded-2xl" alt="" />
+                <img src={`http://localhost:3000/${e.media}`} className="w-full h-64 object-cover mb-2 rounded-2xl" alt="" />
 
                 <div className="p-2">
                     <div className="  text-2xl font-bold mb-2">{e.user.name}</div>

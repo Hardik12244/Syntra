@@ -50,12 +50,13 @@ function Feed({ userId }: Props) {
     }
 
     function addPost() {
-
-        axios.post(`http://localhost:3000/post/`, {
-            user: userId,
-            caption,
-            image
-        }).then((res) => {
+        const formData = new FormData();
+        formData.append("user",userId);
+        formData.append("caption",caption);
+        if (!file) return;
+        formData.append("media",file)
+        axios.post(`http://localhost:3000/post/`,formData)
+        .then((res) => {
             console.log("post uploaded")
             setIsOpen(false);
             axios.get("http://localhost:3000/post")
