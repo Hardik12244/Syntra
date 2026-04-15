@@ -1,5 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 const Card = ({ children, className = "" }) => (
     <motion.div
@@ -22,7 +24,8 @@ const Reveal = ({ children, delay = 0 }) => (
 );
 
 export default function LandingPage() {
-    
+    const googleRef = useRef<HTMLDivElement>(null);
+
     const { scrollYProgress } = useScroll();
     const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
 
@@ -74,15 +77,34 @@ export default function LandingPage() {
                         </div>
 
                         <motion.button
+                            onClick={() => {
+                                googleRef.current?.querySelector("div[role=button]")?.click();
+                            }}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className="px-8 py-2.5 rounded-full bg-pink-500 text-white text-sm font-bold shadow-xl shadow-slate-200"
-                            onClick={() => {
-    window.location.href = "http://localhost:3000/auth/google";
-  }}
                         >
                             Get Started
                         </motion.button>
+
+                        {/* hidden google button */}
+                        <div ref={googleRef} className="hidden">
+                            <GoogleLogin
+                                onSuccess={async (credentialResponse) => {
+                                    try {
+                                        const res = await axios.post("http://localhost:3000/auth/google", {
+                                            token: credentialResponse.credential,
+                                        });
+
+                                        localStorage.setItem("token", res.data.token);
+                                        window.location.reload();
+                                    } catch (err) {
+                                        console.error(err);
+                                    }
+                                }}
+                                onError={() => console.log("Login Failed")}
+                            />
+                        </div>
                     </nav>
 
                     <section id="Home" className="text-center pt-20 pb-10 px-6">
@@ -103,6 +125,9 @@ export default function LandingPage() {
                             <motion.button
                                 whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(244, 63, 94, 0.3)" }}
                                 className="mt-10 bg-pink-500 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-lg"
+                                onClick={() => {
+                                googleRef.current?.querySelector("div[role=button]")?.click();
+                            }}
                             >
                                 Join the Waitlist
                             </motion.button>
@@ -153,75 +178,75 @@ export default function LandingPage() {
                     </section>
 
                     <section
-  id="features"
-  className="relative py-32 px-10 overflow-hidden bg-center bg-no-repeat"
-  style={{
-    backgroundImage: "url('/image copy 7.png')",
-    backgroundSize: "600px",
-  }}
->
+                        id="features"
+                        className="relative py-32 px-10 overflow-hidden bg-center bg-no-repeat"
+                        style={{
+                            backgroundImage: "url('/image copy 7.png')",
+                            backgroundSize: "600px",
+                        }}
+                    >
 
-  {/* 🔥 overlay for readability */}
-  <div className="absolute inset-0 bg-white/80" />
+                        {/* 🔥 overlay for readability */}
+                        <div className="absolute inset-0 bg-white/80" />
 
-  {/* 🔥 floating glow */}
-  <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-pink-200/30 blur-3xl rounded-full" />
+                        {/* 🔥 floating glow */}
+                        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-pink-200/30 blur-3xl rounded-full" />
 
-  <div className="relative z-10">
+                        <div className="relative z-10">
 
-    {/* HEADING */}
-    <Reveal>
-      <motion.h2
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="text-center text-5xl md:text-6xl font-bold mb-20 tracking-tight 
+                            {/* HEADING */}
+                            <Reveal>
+                                <motion.h2
+                                    initial={{ opacity: 0, y: 40 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.7 }}
+                                    className="text-center text-5xl md:text-6xl font-bold mb-20 tracking-tight 
         bg-gradient-to-r from-slate-900 via-pink-500 to-rose-400 
         bg-clip-text text-transparent"
-      >
-        Why Syntra?
-      </motion.h2>
-    </Reveal>
+                                >
+                                    Why Syntra?
+                                </motion.h2>
+                            </Reveal>
 
-    {/* GRID */}
-    <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
+                            {/* GRID */}
+                            <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
 
-      {features.map((item, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 60, scale: 0.95 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: i * 0.15, duration: 0.6 }}
-          whileHover={{ y: -12, scale: 1.02 }}
-          className="bg-white/80 backdrop-blur-xl border border-white/20 
+                                {features.map((item, i) => (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ opacity: 0, y: 60, scale: 0.95 }}
+                                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                                        transition={{ delay: i * 0.15, duration: 0.6 }}
+                                        whileHover={{ y: -12, scale: 1.02 }}
+                                        className="bg-white/80 backdrop-blur-xl border border-white/20 
           shadow-[0_20px_50px_rgba(0,0,0,0.08)] rounded-[32px] p-10"
-        >
+                                    >
 
-          {/* ICON */}
-          <motion.div
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="w-12 h-12 bg-pink-500/10 rounded-2xl mb-6 flex items-center justify-center"
-          >
-            <div className="w-5 h-5 bg-pink-500 rounded-full" />
-          </motion.div>
+                                        {/* ICON */}
+                                        <motion.div
+                                            animate={{ scale: [1, 1.2, 1] }}
+                                            transition={{ repeat: Infinity, duration: 2 }}
+                                            className="w-12 h-12 bg-pink-500/10 rounded-2xl mb-6 flex items-center justify-center"
+                                        >
+                                            <div className="w-5 h-5 bg-pink-500 rounded-full" />
+                                        </motion.div>
 
-          {/* TITLE */}
-          <h3 className="text-2xl font-bold mb-3">
-            {item.title}
-          </h3>
+                                        {/* TITLE */}
+                                        <h3 className="text-2xl font-bold mb-3">
+                                            {item.title}
+                                        </h3>
 
-          {/* DESC */}
-          <p className="text-slate-500 leading-relaxed font-medium">
-            {item.desc}
-          </p>
+                                        {/* DESC */}
+                                        <p className="text-slate-500 leading-relaxed font-medium">
+                                            {item.desc}
+                                        </p>
 
-        </motion.div>
-      ))}
+                                    </motion.div>
+                                ))}
 
-    </div>
-  </div>
-</section>
+                            </div>
+                        </div>
+                    </section>
 
                     <section id="Stats" className="py-32 relative bg-slate-900 text-white overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
