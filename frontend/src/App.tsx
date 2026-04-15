@@ -3,6 +3,7 @@ import './App.css'
 import Feed from './pages/Feed'
 import Navbar from './components/Navbar';
 import axios from 'axios';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   const [user, setUser] = useState(null)
@@ -24,10 +25,16 @@ function App() {
 
   return (
     <>
-      <div>
-        <Navbar user={user} setUser={setUser} />
-        {user ? <Feed userId={user._id} /> : <div className='flex justify-center items-center text-2xl'>Please login</div>}      
-        </div>
+      {user ? (
+        <>
+          <Navbar user={user} setUser={setUser} />
+          <Feed userId={user._id} />
+        </>
+      ) : (
+        <>
+          <LandingPage />
+        </>
+      )}
     </>
   )
 }
