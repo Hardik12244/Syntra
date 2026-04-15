@@ -13,7 +13,7 @@ import Messages from "./pages/Messages";
 import Settings from "./pages/Setting";
 
 function App() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,14 +34,14 @@ function App() {
     <>
       
       {user ? (
-        <>
+        <div className="h-screen flex flex-col overflow-hidden">
           <Navbar user={user} setUser={setUser} />
 
-          <div className="flex h-screen">
+          <div className="flex flex-1 min-h-0">
             
             <Sidebar />
 
-            <div className="flex-1 overflow-y-auto pt-20">
+            <div className="flex-1 overflow-y-auto min-h-0">
               <Routes>
                 <Route path="/" element={<Feed userId={user._id} />} />
                 <Route path="/profile" element={<Profile />} />
@@ -53,7 +53,7 @@ function App() {
             </div>
 
           </div>
-        </>
+        </div>
       ) : (
         <LandingPage />
       )}
