@@ -22,13 +22,13 @@ bg-white shadow-sm border-b border-gray-200 text-pink-500 hover:text-pink-600 st
 
             <div className="flex items-center">
                 <div className=" bg-white rounded-md">
-                    <img src="ff.png" className="h-20 w-60" />
+                    <img src="ff.png" className="h-20 w-50" />
                 </div>
             </div>
 
             <div className="flex items-center gap-4">
                 {user ? <div className="flex gap-4 items-center justify-center">
-                    <div className="text-gray-700 font-medium">{user.name}</div>
+                    <div className="text-gray-700 font-medium mr-4 ">{user.name}</div>
                     <button onClick={handleLogout} className="px-3 py-1.5 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition">
                         Logout
                     </button>

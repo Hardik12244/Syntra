@@ -70,7 +70,7 @@ function Feed({ userId }: Props) {
 
 
     return (
-  <div className="min-h-screen bg-gray-50">
+  <div className="min-h-full bg-gray-50">
 
     {/* Modal */}
     {isOpen && (
@@ -117,9 +117,9 @@ function Feed({ userId }: Props) {
     )}
 
     {/* Feed */}
-    <div className="flex justify-center pt-24">
+    <div className="flex justify-center py-6">
       
-      <div className="w-[33%] space-y-4">
+      <div className="w-[33%] space-y-4 pb-10">
 
         {posts.map((e) => (
           <PostCard

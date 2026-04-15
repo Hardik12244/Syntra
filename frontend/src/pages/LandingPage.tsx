@@ -61,10 +61,10 @@ export default function LandingPage() {
                         <motion.img
                             whileHover={{ rotate: -2 }}
                             src="ff.png"
-                            className="h-12 w-auto cursor-pointer"
+                            className="h-16 w-40 cursor-pointer"
                         />
 
-                        <div className="hidden md:flex gap-8 text-sm font-semibold tracking-tight text-slate-600">
+                        <div className="hidden md:flex gap-8 text-md font-semibold tracking-tight text-slate-600">
                             {["Home", "Testimonials", "Features", "Discover", "Stats", "Contact"].map((item) => (
                                 <a
                                     key={item}
@@ -82,7 +82,7 @@ export default function LandingPage() {
                             }}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="px-8 py-2.5 rounded-full bg-pink-500 text-white text-sm font-bold shadow-xl shadow-slate-200"
+                            className="px-8 py-2.5 rounded-full bg-pink-500 text-white text-md font-bold shadow-xl shadow-slate-200"
                         >
                             Get Started
                         </motion.button>
