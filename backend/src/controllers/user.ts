@@ -5,7 +5,7 @@ async function createUser(req: Request, res: Response) {
     console.log("BODY:", req.body);
     try {
         const data = req.body
-        if (!data.phoneNo || !data.interests || !data.intent) {
+        if (!data.phoneNo || !Array.isArray(data.interests) ) {
             return res.status(400).json({ msg: "Missing fields" });
         }
         const existingUser = await User.findOne({
@@ -17,6 +17,7 @@ async function createUser(req: Request, res: Response) {
         const user = await User.create({
             name: data.name,
             phoneNo: data.phoneNo,
+            email: data.email,
             college: data.college,
             interests: data.interests,
         })

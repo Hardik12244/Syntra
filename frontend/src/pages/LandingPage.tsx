@@ -87,16 +87,19 @@ export default function LandingPage() {
                             Get Started
                         </motion.button>
 
-                        {/* hidden google button */}
                         <div ref={googleRef} className="hidden">
                             <GoogleLogin
                                 onSuccess={async (credentialResponse) => {
                                     try {
-                                        const res = await axios.post("http://localhost:3000/auth/google", {
-                                            token: credentialResponse.credential,
-                                        });
-
-                                        localStorage.setItem("token", res.data.token);
+                                        await axios.post(
+                                            "http://localhost:3000/auth/google",
+                                            {
+                                                token: credentialResponse.credential,
+                                            },
+                                            {
+                                                withCredentials: true,
+                                            }
+                                        );
                                         window.location.reload();
                                     } catch (err) {
                                         console.error(err);
@@ -126,8 +129,8 @@ export default function LandingPage() {
                                 whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(244, 63, 94, 0.3)" }}
                                 className="mt-10 bg-pink-500 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-lg"
                                 onClick={() => {
-                                googleRef.current?.querySelector("div[role=button]")?.click();
-                            }}
+                                    googleRef.current?.querySelector("div[role=button]")?.click();
+                                }}
                             >
                                 Join the Waitlist
                             </motion.button>

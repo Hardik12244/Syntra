@@ -34,8 +34,13 @@ export async function googleAuth(req: Request, res: Response) {
             "secret123",
             { expiresIn: "7d" }
         );
+        res.cookie("token", jwtToken, {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false,
+        });
+
         res.json({
-            token: jwtToken,
             user,
         });
     } catch (err) {
@@ -43,28 +48,27 @@ export async function googleAuth(req: Request, res: Response) {
         res.status(500).json({ msg: "Google auth failed" });
     }
 }
+;
 
 export async function getMe(req: Request, res: Response) {
-  try {
-    const authHeader = req.headers.authorization;
+    try {
+        const token = req.cookies.token; // ✅ from cookie
 
-    if (!authHeader) {
-      return res.status(401).json({ msg: "No token" });
+        if (!token) {
+            return res.status(401).json({ msg: "No token" });
+        }
+
+        const decoded: any = jwt.verify(token, "secret123");
+
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        res.json(user);
+
+    } catch (error) {
+        res.status(401).json({ msg: "Invalid token" });
     }
-
-    const token = authHeader.split(" ")[1];
-
-    const decoded: any = jwt.verify(token, "secret123");
-
-    const user = await User.findById(decoded.id);
-
-    if (!user) {
-      return res.status(404).json({ msg: "User not found" });
-    }
-
-    res.json(user);
-
-  } catch (error) {
-    res.status(401).json({ msg: "Invalid token" });
-  }
 }

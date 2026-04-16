@@ -1,22 +1,24 @@
-import { Request, Response ,NextFunction} from "express";
+import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-export async function authMiddleware(req: Request, res: Response,next:NextFunction) {
-    try {
-        const authHeader = req.headers.authorization;
+export async function authMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const token = req.cookies.token; // ✅ read from cookie
 
-        if (!authHeader) {
-            return res.status(401).json({ msg: "No token" });
-        }
-
-        const token = authHeader.split(" ")[1];
-
-        const decoded: any = jwt.verify(token, "secret123");
-
-        (req as any).user = decoded;
-        next();
-
-    } catch (error) {
-        return res.status(401).json({ msg: "Invalid token" });
+    if (!token) {
+      return res.status(401).json({ msg: "No token" });
     }
+
+    const decoded: any = jwt.verify(token, "secret123");
+
+    (req as any).user = decoded; // you can later attach full user if needed
+    next();
+
+  } catch (error) {
+    return res.status(401).json({ msg: "Invalid token" });
+  }
 }

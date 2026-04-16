@@ -15,20 +15,18 @@ import Settings from "./pages/Setting";
 function App() {
   const [user, setUser] = useState<any>(null)
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) return;
-
-    axios.get("http://localhost:3000/auth/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((res) => {
+useEffect(() => {
+  axios
+    .get("http://localhost:3000/auth/me", {
+      withCredentials: true, // 
+    })
+    .then((res) => {
       setUser(res.data);
+    })
+    .catch(() => {
+      setUser(null);
     });
-
-  }, []);
+}, []);
 
   return (
     <>
@@ -44,7 +42,7 @@ function App() {
             <div className="flex-1 overflow-y-auto min-h-0">
               <Routes>
                 <Route path="/" element={<Feed userId={user._id} />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile" element={<Profile user={user} setUser={setUser}/>} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/matches" element={<Matches />} />
                 <Route path="/messages" element={<Messages />} />

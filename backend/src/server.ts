@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import cookieParser from "cookie-parser";
 import connectDB from "./connect";
 import userRoutes from './routes/user'
 import postRoutes from "./routes/post";
@@ -14,7 +15,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // your frontend URL
+    credentials: true,
+  })
+);
+
+app.use(cookieParser());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 app.use('/user',userRoutes);

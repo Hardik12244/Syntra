@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 interface Match extends Document {
-    user1: mongoose.Types.ObjectId,
+    user1:mongoose.Types.ObjectId,
     user2:mongoose.Types.ObjectId,
 }
 
