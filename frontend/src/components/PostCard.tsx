@@ -1,4 +1,5 @@
 import type { Post } from "../types/Post";
+import { useNavigate } from "react-router-dom";
 
 type PostCardProps = {
   e: Post;
@@ -8,6 +9,7 @@ type PostCardProps = {
 
 export default function PostCard({ e, onLike, userId }: PostCardProps) {
   const isLiked = e.likes.includes(userId);
+const navigate = useNavigate();
 
   return (
     <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">
@@ -15,7 +17,7 @@ export default function PostCard({ e, onLike, userId }: PostCardProps) {
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600">
-          {e.user.name[0]}
+          <img src={e.user.avatar} onClick={() => navigate(`/profile/${e.user._id}`)} alt="" />
         </div>
         <div className="font-medium text-gray-800">
           {e.user.name}

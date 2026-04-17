@@ -18,17 +18,21 @@ type Props = {
 };
 
 type FormDataType = Partial<User>;
-const InputField = ({ label, ...props }: any) => (
-    <div>
-      <p className="label font-semibold">{label}</p>
-      <input
-        {...props}
-        value={props.value || ""}
-        className="input bg-pink-100 p-2 rounded-2xl"
-      />  </div>
-  );
 
+
+const InputField = ({ label, value, onChange, ...props }: any) => (
+  <div>
+    <p className="label font-semibold">{label}</p>
+    <input
+      {...props}
+      value={value ?? ""}
+      onChange={onChange}
+      className="input bg-pink-100 p-2 rounded-2xl"
+    />
+  </div>
+);
 export default function Profile({ user, setUser }: Props) {
+  
   const [formData, setFormData] = useState<FormDataType>({});
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);

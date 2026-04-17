@@ -7,5 +7,6 @@ export type Post = {
     user: {
         _id: string,
         name: string,
+        avatar:string,
     }
 }

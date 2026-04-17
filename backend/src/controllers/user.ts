@@ -30,18 +30,22 @@ async function createUser(req: Request, res: Response) {
 
 async function getUser(req: Request, res: Response) {
     try {
-        const id = req.params.id;
-        const user = await User.findOne({
-            _id: id,
-        })
+        const { id } = req.params;
+
+        const user = await User.findById(id);
+
         if (!user) {
-            return res.status(404).json({ msg: "User does not exist" })
+            return res.status(404).json({ msg: "User does not exist" });
         }
-        res.status(200).json(user);
+
+        return res.status(200).json(user);
+
     } catch (error) {
-        res.status(500).json({ msg: "Server error" });
+        console.log(error);
+        return res.status(500).json({ msg: "Server error" });
     }
 }
+
 async function getUserByPhone(req: Request, res: Response) {
     try {
         const { phoneNo } = req.params;
