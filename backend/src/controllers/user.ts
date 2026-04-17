@@ -43,34 +43,36 @@ async function getUser(req: Request, res: Response) {
     }
 }
 async function getUserByPhone(req: Request, res: Response) {
-  try {
-    const { phoneNo } = req.params;
+    try {
+        const { phoneNo } = req.params;
 
-    if (!phoneNo) {
-      return res.status(400).json({ msg: "Phone required" });
+        if (!phoneNo) {
+            return res.status(400).json({ msg: "Phone required" });
+        }
+
+        const user = await User.findOne({ phoneNo }).select("-__v");
+
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        res.status(200).json(user);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: "Server error" });
     }
-
-    const user = await User.findOne({ phoneNo }).select("-__v");
-
-    if (!user) {
-      return res.status(404).json({ msg: "User not found" });
-    }
-
-    res.status(200).json(user);
-
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ msg: "Server error" });
-  }
 }
 
 async function updateProfile(req: Request, res: Response) {
     try {
         const userId = (req as any).user.id;
-        const { college, interests, gender, dateOfBirth,phoneNo } = req.body;
+        const { college, interests, gender, dateOfBirth, phoneNo } = req.body;
 
         const updateData: any = {};
-
+        if (req.file) {
+            updateData.avatar = `http://localhost:3000/uploads/${req.file.filename}`;
+        }
         if (college) updateData.college = college;
         if (gender) updateData.gender = gender;
         if (phoneNo) updateData.phoneNo = phoneNo;
@@ -81,13 +83,13 @@ async function updateProfile(req: Request, res: Response) {
         }
 
         const isComplete = !!(
-  updateData.college &&
-  Array.isArray(updateData.interests) &&
-  updateData.interests.length > 0 &&
-  updateData.gender &&
-  updateData.dateOfBirth &&
-  updateData.phoneNo
-);
+            updateData.college &&
+            Array.isArray(updateData.interests) &&
+            updateData.interests.length > 0 &&
+            updateData.gender &&
+            updateData.dateOfBirth &&
+            updateData.phoneNo
+        );
 
         updateData.isProfileComplete = isComplete;
 

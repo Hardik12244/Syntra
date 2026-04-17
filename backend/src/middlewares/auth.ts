@@ -7,7 +7,7 @@ export async function authMiddleware(
   next: NextFunction
 ) {
   try {
-    const token = req.cookies.token; // ✅ read from cookie
+    const token = req.cookies.token; 
 
     if (!token) {
       return res.status(401).json({ msg: "No token" });
@@ -15,7 +15,7 @@ export async function authMiddleware(
 
     const decoded: any = jwt.verify(token, "secret123");
 
-    (req as any).user = decoded; // you can later attach full user if needed
+    (req as any).user = decoded; 
     next();
 
   } catch (error) {
