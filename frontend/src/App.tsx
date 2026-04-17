@@ -11,6 +11,8 @@ import Search from "./pages/Search";
 import Matches from "./pages/Matches";
 import Messages from "./pages/Messages";
 import Settings from "./pages/Setting";
+import OnBoarding from './pages/OnBoarding';
+
 
 function App() {
   const [user, setUser] = useState<any>(null)
@@ -32,7 +34,8 @@ useEffect(() => {
     <>
       
       {user ? (
-        <div className="h-screen flex flex-col overflow-hidden">
+        user.isProfileComplete ? (
+          <div className="h-screen flex flex-col overflow-hidden">
           <Navbar user={user} setUser={setUser} />
 
           <div className="flex flex-1 min-h-0">
@@ -52,6 +55,9 @@ useEffect(() => {
 
           </div>
         </div>
+        ) : (
+          <OnBoarding user={user} setUser={setUser}/>
+        ) 
       ) : (
         <LandingPage />
       )}

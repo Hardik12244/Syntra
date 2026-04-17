@@ -26,6 +26,7 @@ export async function googleAuth(req: Request, res: Response) {
                 name,
                 email,
                 avatar: picture,
+                isProfileComplete: false,
             });
         }
 
@@ -40,9 +41,7 @@ export async function googleAuth(req: Request, res: Response) {
             secure: false,
         });
 
-        res.json({
-            user,
-        });
+        res.json(user);
     } catch (err) {
         console.log(err);
         res.status(500).json({ msg: "Google auth failed" });

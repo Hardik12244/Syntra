@@ -5,7 +5,7 @@ async function createUser(req: Request, res: Response) {
     console.log("BODY:", req.body);
     try {
         const data = req.body
-        if (!data.phoneNo || !Array.isArray(data.interests) ) {
+        if (!data.phoneNo || !Array.isArray(data.interests)) {
             return res.status(400).json({ msg: "Missing fields" });
         }
         const existingUser = await User.findOne({
@@ -43,54 +43,69 @@ async function getUser(req: Request, res: Response) {
     }
 }
 async function getUserByPhone(req: Request, res: Response) {
-    try {
-        const phoneNo = req.params.phoneNo;
+  try {
+    const { phoneNo } = req.params;
 
-        const user = await User.findOne({ phoneNo });
-
-        if (!user) {
-            return res.status(404).json({ msg: "User not found" });
-        }
-
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(500).json({ msg: "Server error" });
+    if (!phoneNo) {
+      return res.status(400).json({ msg: "Phone required" });
     }
+
+    const user = await User.findOne({ phoneNo }).select("-__v");
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    res.status(200).json(user);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error" });
+  }
 }
 
 async function updateProfile(req: Request, res: Response) {
-
     try {
         const userId = (req as any).user.id;
-        const { college, interests, gender, dateOfBirth } = req.body;
+        const { college, interests, gender, dateOfBirth,phoneNo } = req.body;
 
-        const isComplete =
-            college &&
-            interests &&
-            Array.isArray(interests) &&
-            interests.length > 0;
+        const updateData: any = {};
 
-        const updateData: any = {
-            college,
-            interests,
-            gender,
-            dateOfBirth,
-            isProfileComplete: isComplete
+        if (college) updateData.college = college;
+        if (gender) updateData.gender = gender;
+        if (phoneNo) updateData.phoneNo = phoneNo;
+        if (dateOfBirth) updateData.dateOfBirth = dateOfBirth;
+
+        if (Array.isArray(interests)) {
+            updateData.interests = interests;
         }
 
-        const user = await user.findByIdAndUpdate(
+        const isComplete = !!(
+  updateData.college &&
+  Array.isArray(updateData.interests) &&
+  updateData.interests.length > 0 &&
+  updateData.gender &&
+  updateData.dateOfBirth &&
+  updateData.phoneNo
+);
+
+        updateData.isProfileComplete = isComplete;
+
+        const updatedUser = await User.findByIdAndUpdate(
             userId,
             updateData,
-            { new: true, }
-        )
-        if (!user) {
+            { new: true }
+        );
+
+        if (!updatedUser) {
             return res.status(404).json({ msg: "User not found" });
         }
-            return res.status(200).json(user);
+
+        return res.status(200).json(updatedUser);
 
     } catch (error) {
-            return res.status(500).json({ msg: "Server error" });
-
+        console.log(error);
+        return res.status(500).json({ msg: "Server error" });
     }
 }
 
