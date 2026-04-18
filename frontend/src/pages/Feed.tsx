@@ -55,17 +55,22 @@ function Feed({ userId }: Props) {
     formData.append("caption", caption);
     if (!file) return;
     formData.append("media", file)
+
     axios.post(`http://localhost:3000/post/`, formData)
       .then(() => {
         console.log("post uploaded")
+
         setIsOpen(false);
+
+        setCaption("");
+      setFile(null);
+
         axios.get("http://localhost:3000/post")
           .then((res) => {
             console.log(res.data);
             setPosts(res.data)
           })
       })
-
   }
 
 
@@ -105,7 +110,7 @@ function Feed({ userId }: Props) {
 
               <button
                 onClick={addPost}
-                className="bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2 rounded-lg hover:opacity-90"
+                className="bg-cyan-800 to-purple-500 text-white py-2 rounded-lg hover:opacity-90"
               >
                 Upload
               </button>
@@ -142,7 +147,7 @@ function Feed({ userId }: Props) {
 
       <button
         className="fixed bottom-6 right-6 z-40 
-      bg-gradient-to-r from-pink-500 to-purple-500 
+      bg-purple-500 
       text-white rounded-full w-14 h-14 
       flex items-center justify-center shadow-lg hover:scale-105 transition"
         onClick={() => setIsOpen(true)}

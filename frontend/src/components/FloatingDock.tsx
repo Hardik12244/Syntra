@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Link } from "react-router-dom"; // Assuming React Router
+import { Link } from "react-router-dom";
 import { IconLayoutNavbarCollapse } from "@tabler/icons-react";
 import {
   AnimatePresence,
@@ -8,14 +8,12 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
-} from "framer-motion"; // Changed from 'motion/react' to standard 'framer-motion'
+} from "framer-motion"; 
 
-// Utility for merging classes (common in Tailwind projects)
 function cn(...classes: (string | undefined | false)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-// Ensure this matches your local types file
 export interface DockItem {
   title: string;
   icon: React.ReactNode;
@@ -54,8 +52,8 @@ const FloatingDockMobile = ({
   const [open, setOpen] = useState(false);
 
   const playSound = () => {
-    const audio = new Audio("/sounds/pop.mp3");
-    audio.play().catch(() => {}); // Catch prevents errors if sound is blocked by browser
+    const audio = new Audio("/Users/hardik/Coding/Projects/Syntra/frontend/src/sounds/pop.mp3");
+    audio.play().catch(() => {}); 
   };
 
   return (
@@ -87,7 +85,7 @@ const FloatingDockMobile = ({
                     {...(item.socialLink
                       ? { target: "_blank", rel: "noopener noreferrer" }
                       : {})}
-                    onClick={playSound}dark
+                    onClick={playSound}
                     className="flex size-10 items-center justify-center rounded-full bg-slate-200/80 p-2.5 "
                   >
                     <div className="h-full w-full">{item.icon}</div>
