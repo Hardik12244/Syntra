@@ -8,7 +8,7 @@ type User = {
   phoneNo?: string;
   college?: string;
   bio?: string;
-  dob?: string;
+  dateOfBirth?: string;
   avatar?: string;
   interests: string[];
 };
@@ -32,7 +32,7 @@ const InputField = ({ label, value, onChange, ...props }: any) => (
   </div>
 );
 export default function Profile({ user, setUser }: Props) {
-  
+
   const [formData, setFormData] = useState<FormDataType>({});
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -43,8 +43,17 @@ export default function Profile({ user, setUser }: Props) {
         const res = await axios.get(`http://localhost:3000/auth/me`, {
           withCredentials: true,
         });
-        setUser(res.data);
-        setFormData(res.data);
+
+        const userData = {
+          ...res.data,
+          dateOfBirth: res.data.dateOfBirth
+            ? res.data.dateOfBirth.split("T")[0]
+            : "",
+        };
+
+        setUser(userData);
+        setFormData(userData);
+
       } catch (err) {
         console.error(err);
       }
@@ -71,7 +80,12 @@ export default function Profile({ user, setUser }: Props) {
       );
 
       setUser(res.data);
-      setFormData(res.data);
+      setFormData({
+        ...res.data,
+        dateOfBirth: res.data.dateOfBirth
+          ? res.data.dateOfBirth.split("T")[0]
+          : "",
+      });
       setIsEditing(false);
     } catch (err) {
       console.error(err);
@@ -81,7 +95,8 @@ export default function Profile({ user, setUser }: Props) {
   };
 
   if (!user) return <div className="p-6">Loading...</div>;
-  
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-indigo-50 to-purple-50 p-6">
       <div className="max-w-5xl mx-auto">
@@ -115,8 +130,14 @@ export default function Profile({ user, setUser }: Props) {
                 <InputField label="Name" name="name" value={formData.name} onChange={handleChange} disabled={!isEditing} />
                 <InputField label="Phone" name="phoneNo" value={formData.phoneNo || ""} onChange={handleChange} disabled={!isEditing} />
                 <InputField label="College" name="college" value={formData.college} onChange={handleChange} disabled={!isEditing} />
-                <InputField label="DOB" type="date" name="dob" value={formData.dob} onChange={handleChange} disabled={!isEditing} />
-
+                <InputField
+                  label="dateOfBirth"
+                  name="dateOfBirth"
+                  type="date"
+                  value={formData.dateOfBirth || ""}
+                  onChange={handleChange}
+                  disabled={!isEditing}
+                />
               </div>
 
               {/* BIO */}
