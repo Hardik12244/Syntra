@@ -1,15 +1,11 @@
-import type { Post } from "../types/Post";
+import type { Post,PostCardProps } from "../types/Post";
 import { useNavigate } from "react-router-dom";
 
-type PostCardProps = {
-  e: Post;
-  onLike: (id: string) => void;
-  userId: string;
-};
+
 
 export default function PostCard({ e, onLike, userId }: PostCardProps) {
   const isLiked = e.likes.includes(userId);
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">

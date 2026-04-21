@@ -80,37 +80,46 @@ async function getPosts(req: Request, res: Response) {
     }
 }
 
+
 async function toggleLike(req: Request, res: Response) {
-    try {
-        const id = req.params.id;
-        const { userId } = req.body;
-        console.log(req.body)
-        const post = await Post.findOne({
-            _id: id,
-        })
-        console.log(post);
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
 
-        if (!post) {
-            return res.status(404).json({ msg: "Post does not exist" })
-        }
-        
-        const userObjectId = new mongoose.Types.ObjectId(userId);
+    const userObjectId = new mongoose.Types.ObjectId(userId);
 
-        const alreadyLiked = post.likes.some((like) =>
-            like?.equals(userObjectId));
+    const post = await Post.findById(id);
 
-         if (alreadyLiked) {
-            post.likes = post.likes.filter(
-                (like) => !like?.equals(userObjectId));
-        } else {
-            post.likes.push(userObjectId);
-        }
-
-        await post.save();
-        res.status(200).json(post);
-    } catch (error) {
-        res.status(500).json({ msg: "Server error" });
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
     }
+
+    const alreadyLiked = post.likes.some((like) =>
+      like.equals(userObjectId)
+    );
+
+    let updatedPost;
+
+    if (alreadyLiked) {
+      updatedPost = await Post.findByIdAndUpdate(
+        id,
+        { $pull: { likes: userObjectId } },
+        { new: true }
+      ).populate("user");
+    } else {
+      updatedPost = await Post.findByIdAndUpdate(
+        id,
+        { $addToSet: { likes: userObjectId } },
+        { new: true }
+      ).populate("user");
+    }
+
+    return res.status(200).json(updatedPost);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: "Server error" });
+  }
 }
 
 export { getPost, createPost, updatePost, deletePost, getPosts, toggleLike }

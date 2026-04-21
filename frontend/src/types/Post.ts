@@ -10,3 +10,9 @@ export type Post = {
         avatar:string,
     }
 }
+
+export type PostCardProps = {
+  e: Post;
+  onLike: (id: string) => void;
+  userId: string;
+};

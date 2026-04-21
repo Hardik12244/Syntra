@@ -7,6 +7,7 @@ import postRoutes from "./routes/post";
 import crushRoutes from "./routes/crush";
 import matchRoutes from "./routes/match";
 import authRoutes from "./routes/auth"
+import searchRoutes from "./routes/search"
 import cors from "cors";
 
 
@@ -17,7 +18,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // your frontend URL
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -30,6 +31,7 @@ app.use('/post',postRoutes);
 app.use("/crush", crushRoutes);
 app.use("/match", matchRoutes);
 app.use("/auth", authRoutes);
+app.use("/search", searchRoutes);
 
 
 async function server() {
