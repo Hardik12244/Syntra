@@ -189,10 +189,8 @@ export default function LandingPage() {
                         }}
                     >
 
-                        {/* 🔥 overlay for readability */}
                         <div className="absolute inset-0 bg-white/80" />
 
-                        {/* 🔥 floating glow */}
                         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-pink-200/30 blur-3xl rounded-full" />
 
                         <div className="relative z-10">

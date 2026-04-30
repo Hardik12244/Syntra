@@ -11,6 +11,7 @@ export type Post = {
     }
 }
 
+
 export type PostCardProps = {
   e: Post;
   onLike: (id: string) => void;

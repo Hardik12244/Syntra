@@ -12,5 +12,27 @@ searchRouter.get('/trending',async (req,res)=>{
   res.json(posts);
 })
 
+searchRouter.get('/result',async (req, res)=>{
+const q = String(req.query.q || "")
+   if (!q) {
+    return res.json({ users: [], posts: [] });
+  } 
+   try {
+    const users = await User.find({
+      name: { $regex: q, $options: "i" }
+    }).limit(10);
+
+    const posts = await Post.find({
+      caption: { $regex: q, $options: "i" }
+    }).populate("user")   
+    .limit(10);
+
+res.json({ users, posts });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Search failed" });
+  }
+})
 
 export default searchRouter;

@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
-type User = {
-  _id: string;
-  name: string;
-  email: string;
-  phoneNo?: string;
-  college?: string;
-  bio?: string;
-  dateOfBirth?: string;
-  avatar?: string;
-  interests: string[];
-};
+import type { User } from '../types/User'
+
 type Props = {
   user: any;
   setUser: (user: any) => void;
@@ -140,17 +131,7 @@ export default function Profile({ user, setUser }: Props) {
                 />
               </div>
 
-              {/* BIO */}
-              {/* <div>
-              <p className="label">Bio</p>
-              <input
-                name="bio"
-                value={formData.bio || ""}
-                onChange={handleChange}
-                disabled={!isEditing}
-                className="input w-full"
-              />
-            </div> */}
+              
 
               {/* INTERESTS */}
               <div>

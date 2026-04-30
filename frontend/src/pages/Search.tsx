@@ -33,7 +33,7 @@ function Search() {
         </>
       ) : (
         <>
-          <SearchResults />
+          <SearchResults query={query} userId={user._id}/>
         </>
       )}
 
