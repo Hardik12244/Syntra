@@ -1,11 +1,13 @@
-import mongoose, { Document} from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 interface Post extends Document {
     user: mongoose.Types.ObjectId,
     caption: string,
     media: string,
     mediaType: string,
-    likes:mongoose.Types.ObjectId[],
+    likes: mongoose.Types.ObjectId[],
+    createdAt: string;
+    updatedAt: string;
 }
 
 const postSchema = new mongoose.Schema<Post>({
@@ -21,8 +23,8 @@ const postSchema = new mongoose.Schema<Post>({
     media: {
         type: String,
     },
-    mediaType:{
-        type:String,
+    mediaType: {
+        type: String,
     },
     likes: [
         {

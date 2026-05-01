@@ -10,9 +10,9 @@ function Search() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/auth/me",{
+    axios.get("http://localhost:3000/auth/me", {
       withCredentials: true
-    }) 
+    })
       .then(res => setUser(res.data))
       .catch(err => console.log(err));
   }, []);
@@ -20,20 +20,38 @@ function Search() {
   return (
     <div className='h-full w-full flex flex-col'>
 
-      <div className='flex justify-center'>
-        <input type="text" placeholder='Search...' value={query}
-          onChange={(e) => setQuery(e.target.value)} className='w-4xl mr-20 mb-10 text-center p-2 justify-center items-center m-5 bg-gray-200 rounded-2xl' />
+      <div className="flex justify-center mt-4 mb-8">
+        <div className="relative w-4xl">
+
+          <input
+            type="text"
+            placeholder="Search..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full p-2 pr-10 text-center bg-gray-200 rounded-2xl outline-none"
+          />
+
+          {query && (
+            <button
+              onClick={() => setQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+            >
+              ✕
+            </button>
+          )}
+
+        </div>
       </div>
 
 
       {query === "" ? (
         <>
-          {user && <TrendingPosts userId={user._id} />}    
-                <PeopleYouMayLike />
+          {user && <TrendingPosts userId={user._id} />}
+          <PeopleYouMayLike />
         </>
       ) : (
         <>
-          <SearchResults query={query} userId={user._id}/>
+          <SearchResults query={query} userId={user._id} />
         </>
       )}
 

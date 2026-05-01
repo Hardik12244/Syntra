@@ -4,16 +4,18 @@ export type Post = {
     media: string,
     mediaType: string,
     likes: string[],
+    createdAt: string;
+    updatedAt: string;
     user: {
         _id: string,
         name: string,
-        avatar:string,
+        avatar: string,
     }
 }
 
 
 export type PostCardProps = {
-  e: Post;
-  onLike: (id: string) => void;
-  userId: string;
+    e: Post;
+    onLike: (id: string) => void;
+    userId: string;
 };
