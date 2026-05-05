@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     axios
       .get("http://localhost:3000/auth/me", {
-        withCredentials: true, // 
+        withCredentials: true, 
       })
       .then((res) => {
         setUser(res.data);
@@ -51,7 +51,7 @@ function App() {
                   <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
                   <Route path="/search" element={<Search />} />
                   <Route path="/matches" element={<Matches />} />
-                  <Route path="/messages" element={<Messages />} />
+                  <Route path="/messages" element={<Messages user={user}/>} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/profile/:id" element={<PublicProfile/>} />
                 </Routes>
