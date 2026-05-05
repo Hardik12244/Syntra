@@ -17,6 +17,7 @@ export const initSocket = (io: Server) => {
             
             if (receiverSocketId) {
                 io.to(receiverSocketId).emit("receive_message", message);
+                socket.emit("receive_message", message);
             } else {
                 console.log("User not online");
             }
@@ -27,6 +28,7 @@ export const initSocket = (io: Server) => {
             console.log("Online users:", onlineUsers);
         });
 
+        
 
     });
 

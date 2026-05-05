@@ -115,7 +115,6 @@ export default function Profile({ user, setUser }: Props) {
 
             <div className="flex-1 space-y-5">
 
-              {/* GRID */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                 <InputField label="Name" name="name" value={formData.name} onChange={handleChange} disabled={!isEditing} />
