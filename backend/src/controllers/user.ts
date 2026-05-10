@@ -71,12 +71,13 @@ async function getUserByPhone(req: Request, res: Response) {
 async function updateProfile(req: Request, res: Response) {
     try {
         const userId = (req as any).user.id;
-        const { college, interests, gender, dateOfBirth, phoneNo } = req.body;
+        const { name,college, interests, gender, dateOfBirth, phoneNo } = req.body;
 
         const updateData: any = {};
         if (req.file) {
             updateData.avatar = `http://localhost:3000/uploads/${req.file.filename}`;
         }
+        if (name) updateData.name = name;
         if (college) updateData.college = college;
         if (gender) updateData.gender = gender;
         if (phoneNo) updateData.phoneNo = phoneNo;
@@ -92,6 +93,7 @@ async function updateProfile(req: Request, res: Response) {
             updateData.interests.length > 0 &&
             updateData.gender &&
             updateData.dateOfBirth &&
+            updateData.name &&
             updateData.phoneNo
         );
 

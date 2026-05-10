@@ -17,6 +17,7 @@ export async function authMiddleware(
 
     (req as any).user = decoded; 
     next();
+    console.log(decoded);
 
   } catch (error) {
     return res.status(401).json({ msg: "Invalid token" });

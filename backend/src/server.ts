@@ -10,6 +10,7 @@ import crushRoutes from "./routes/crush";
 import matchRoutes from "./routes/match";
 import authRoutes from "./routes/auth"
 import searchRoutes from "./routes/search"
+import messageRoutes from "./routes/message"
 import { initSocket } from "./socket/socket";
 import cors from "cors";
 
@@ -43,6 +44,7 @@ app.use("/crush", crushRoutes);
 app.use("/match", matchRoutes);
 app.use("/auth", authRoutes);
 app.use("/search", searchRoutes);
+app.use("/message", messageRoutes);
 
 const PORT = process.env.PORT || 3000;
 
