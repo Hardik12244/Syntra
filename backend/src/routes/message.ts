@@ -1,8 +1,40 @@
 import { Router } from "express"
 import { authMiddleware } from "../middlewares/auth";
 import Message from "../models/message";
+import User from "../models/user";
 
 const messageRouter = Router();
+
+messageRouter.get('/conversation', authMiddleware, async (req, res) => {
+    const currentUserId = (req as any).user.id;
+
+    const conversations = await Message.find({
+        $or: [
+            { senderId: currentUserId },
+            { receiverId: currentUserId }
+        ]
+    });
+
+
+    const otherUsers = conversations.map((message) => {
+        if (message.senderId.toString() === currentUserId) {
+            return message.receiverId;
+        } else {
+            return message.senderId;
+        }
+    })
+
+    const uniqueUsers = [
+        ...new Set(otherUsers.map((id) => id.toString()))
+    ];
+
+    const users = await User.find({
+        _id: { $in: uniqueUsers }
+    })
+
+    res.json(users);
+
+})
 
 messageRouter.get('/:chatUserId', authMiddleware, async (req, res) => {
     const senderId = (req as any).user.id;
@@ -27,5 +59,7 @@ messageRouter.get('/:chatUserId', authMiddleware, async (req, res) => {
     }
 
 })
+
+
 
 export default messageRouter;
