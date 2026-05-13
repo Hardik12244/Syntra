@@ -147,25 +147,7 @@ export default function Sidebar() {
   )}
 </NavLink>
 
-<NavLink
-  to="/settings"
-  className={({ isActive }) =>
-    `${linkBase} ${isActive ? "text-black" : "text-gray-500"}`
-  }
->
-  {({ isActive }) => (
-    <>
-      {isActive && (
-        <motion.div
-          layoutId="active-pill"
-          className="absolute inset-0 bg-gray-100 rounded-xl"
-          transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        />
-      )}
-      <span className="relative z-10">Settings</span>
-    </>
-  )}
-</NavLink>
+
 
         </div>
 

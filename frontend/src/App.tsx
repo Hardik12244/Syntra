@@ -10,7 +10,6 @@ import Profile from "./pages/Profile";
 import Search from "./pages/Search";
 import Matches from "./pages/Matches";
 import Messages from "./pages/Messages";
-import Settings from "./pages/Setting";
 import OnBoarding from './pages/OnBoarding';
 import PublicProfile from './pages/PublicProfile';
 
@@ -52,7 +51,6 @@ function App() {
                   <Route path="/search" element={<Search />} />
                   <Route path="/matches" element={<Matches />} />
                   <Route path="/messages" element={<Messages user={user}/>} />
-                  <Route path="/settings" element={<Settings />} />
                   <Route path="/profile/:id" element={<PublicProfile/>} />
                 </Routes>
               </div>

@@ -129,7 +129,7 @@ function Feed({ userId }: Props) {
               {posts.map((e) => (
                 <PostCard
                   key={e._id}
-                  e={e}
+                  post={e}
                   onLike={likeButton}
                   userId={userId}
                 />
