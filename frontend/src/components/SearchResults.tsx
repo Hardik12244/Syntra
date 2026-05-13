@@ -4,6 +4,7 @@ import type { User } from "../types/User";
 import type { Post } from "../types/Post";
 import { motion } from "framer-motion";
 import PostCard from "../components/PostCard";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   query: string;
@@ -23,11 +24,12 @@ function SearchResults({ query, userId }: Props) {
 
   const [type, setType] = useState<"all" | "users" | "posts">("all");
   const [sort, setSort] = useState<"latest" | "popular" | "relevant">("latest");
+  const navigate = useNavigate();
 
-  // 🔍 Fetch data
+  // Fetch data
   useEffect(() => {
     if (!query) return;
-
+    
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -149,6 +151,7 @@ function SearchResults({ query, userId }: Props) {
               {results.users.map((user) => (
                 <motion.div
                   key={user._id}
+                  onClick={() => navigate(`/profile/${user._id}`)}
                   whileHover={{ y: -8 }}
                   className="bg-white p-4 rounded-xl shadow"
                 >
@@ -181,7 +184,7 @@ function SearchResults({ query, userId }: Props) {
               {sortedPosts.map((post) => (
                 <PostCard
                   key={post._id}
-                  e={post}
+                  post={post}
                   onLike={onLike}
                   userId={userId}
                 />
