@@ -3,14 +3,67 @@ import Post from "../models/post";
 import User from "../models/user";
 const searchRouter = Router();
 
-searchRouter.get('/trending', async (req, res) => {
-  const posts = await Post.find()
-    .populate("user")
-    .sort({ likes: -1 })
-    .limit(5);
+searchRouter.get("/trending", async (req, res) => {
+  try {
+    const posts = await Post.aggregate([
+      {
+        $match: {
+          media: { $exists: true, $ne: "" }
+        }
+      },
+      {
+        $addFields: {
+          likesCount: {
+            $size: "$likes"
+          },
+          commentsCount: {
+            $size: {
+              $ifNull: ["$comments", []]
+            }
+          }
+        }
+      },
 
-  res.json(posts);
-})
+      {
+        $addFields: {
+          engagementScore: {
+            $add: [
+              "$likesCount",
+              "$commentsCount"
+            ]
+          }
+
+        }
+      },
+
+      {
+        $sort: {
+          engagementScore: -1,
+          createdAt: -1
+        }
+      },
+
+      {
+        $limit: 12
+      }
+
+    ]);
+
+    const populatedPosts = await Post.populate(posts, {
+      path: "user"
+    });
+
+    res.json(populatedPosts);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: "Server Error"
+    });
+
+  }
+
+});
 
 searchRouter.get('/result', async (req, res) => {
   const q = String(req.query.q || "")
@@ -60,6 +113,9 @@ searchRouter.get("/suggestions", async (req, res) => {
     res.status(500).json({
       message: "Server Error"
     });
-  }});
+  }
+});
+
+
 
 export default searchRouter;
