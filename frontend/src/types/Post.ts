@@ -29,6 +29,5 @@ export type Post = {
 
 export type PostCardProps = {
     post: Post;
-    onLike: (id: string) => void;
     userId: string;
 };

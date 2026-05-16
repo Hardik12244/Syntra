@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPost, deletePost, getPost,getPosts,toggleLike,updatePost,createComment } from "../controllers/post";
+import { createPost, deletePost, getPost,getPosts,toggleLike,updatePost,createComment,getSelfPosts } from "../controllers/post";
 import { upload } from "../multer";
 import { authMiddleware } from "../middlewares/auth";
 
@@ -8,6 +8,8 @@ const postRouter = Router();
 postRouter.get('/', getPosts)
 
 postRouter.get('/:id', getPost)
+
+postRouter.get('/user/:userId', authMiddleware, getSelfPosts)
 
 postRouter.post('/:id/like',authMiddleware, toggleLike)
 

@@ -22,32 +22,7 @@ function Feed({ userId }: Props) {
       })
   }, [])
 
-  function likeButton(id: string) {
-    console.log("clicked", id);
 
-    const udpatedPost = posts.map((e) => {
-      if (e._id === id) {
-        const alreadyLiked = e.likes.includes(userId);
-        if (alreadyLiked) {
-          return {
-            ...e,
-            likes: e.likes.filter((l) => l !== userId)
-          };
-        } else {
-          return {
-            ...e,
-            likes: [...e.likes, userId],
-          }
-        }
-      }
-      return e;
-    })
-    setPosts(udpatedPost);
-
-    axios.post(`http://localhost:3000/post/${id}/like`, {
-      userId,
-    })
-  }
 
   function addPost() {
     const formData = new FormData();
@@ -130,7 +105,6 @@ function Feed({ userId }: Props) {
                 <PostCard
                   key={e._id}
                   post={e}
-                  onLike={likeButton}
                   userId={userId}
                 />
               ))}

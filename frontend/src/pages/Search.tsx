@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import TrendingPosts from "../components/TrendingPosts";
-import PeopleYouMayLike from "../components/PeopleYouMayLike";
 import SearchResults from "../components/SearchResults";
 import axios from "axios";
 
@@ -142,7 +141,6 @@ function Search() {
         {activeSearch.trim() === "" ? (
           <>
             {user && <TrendingPosts userId={user._id} />}
-            <PeopleYouMayLike />
           </>
         ) : (
           <>

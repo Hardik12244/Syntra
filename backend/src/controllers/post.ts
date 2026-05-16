@@ -79,12 +79,23 @@ async function getPosts(req: Request, res: Response) {
         res.status(500).json({ msg: "Server error" });
     }
 }
+async function getSelfPosts(req: Request, res: Response) {
+    try {
+        const userId = req.params.userId;
+        const posts = await Post.find({ user: userId })
+            .sort({ createdAt: -1 })
+            .populate("user");
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(500).json({ msg: "Server error" });
+    }
+}
 
 
 async function toggleLike(req: Request, res: Response) {
     try {
         const { id } = req.params;
-        const { userId } = req.body;
+        const userId = (req as any).user.id;
 
         const userObjectId = new mongoose.Types.ObjectId(userId);
 
@@ -133,7 +144,7 @@ async function createComment(req: Request, res: Response) {
             return res.status(404).json({ msg: "Post not found" });
         }
 
-        const newComment:any = {
+        const newComment: any = {
             user: userId,
             text: text,
         }
@@ -148,7 +159,7 @@ async function createComment(req: Request, res: Response) {
         res.json(updatedPost);
 
 
-    } catch (err:any) {
+    } catch (err: any) {
         res.status(500).json({
             message: err.message
         });
@@ -156,4 +167,4 @@ async function createComment(req: Request, res: Response) {
 }
 
 
-export { getPost, createPost, updatePost, deletePost, getPosts, toggleLike, createComment }
+export { getPost, createPost, updatePost, deletePost, getPosts, toggleLike, createComment, getSelfPosts }
