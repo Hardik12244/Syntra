@@ -5,11 +5,13 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 
 
-export default function PostCard({ post, userId }: PostCardProps) {
-    const [likes, setLikes] = useState(post.likes || []);
+export default function PostCard({ post, userId, setPosts }: PostCardProps) {
+  const [likes, setLikes] = useState(post.likes || []);
 
   const isLiked = likes.includes(userId);
   const navigate = useNavigate();
+
+  const isOwner = post.user._id === userId;
 
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState(post.comments || []);
@@ -33,49 +35,91 @@ export default function PostCard({ post, userId }: PostCardProps) {
     }
   }
 
-const handleLike = async () => {
+  const handleLike = async () => {
 
-  const alreadyLiked = likes.includes(userId);
+    const alreadyLiked = likes.includes(userId);
 
-  const updatedLikes = alreadyLiked
-    ? likes.filter((id) => id !== userId)
-    : [...likes, userId];
+    const updatedLikes = alreadyLiked
+      ? likes.filter((id) => id !== userId)
+      : [...likes, userId];
 
-  setLikes(updatedLikes);
+    setLikes(updatedLikes);
 
-  try {
+    try {
 
-    const res = await axios.post(
-      `http://localhost:3000/post/${post._id}/like`,
-      {},
-      {
-        withCredentials: true
+      const res = await axios.post(
+        `http://localhost:3000/post/${post._id}/like`,
+        {},
+        {
+          withCredentials: true
+        }
+      );
+
+      setLikes(res.data.likes);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/post/delete/${post._id}`,
+        {
+          withCredentials: true,
+        })
+
+      if (setPosts) {
+        setPosts((prev) =>
+          prev.filter((p) => p._id !== post._id)
+        );
       }
-    );
 
-    setLikes(res.data.likes);
 
-  } catch (error) {
+    } catch (error) {
+      console.log(error);
 
-    console.log(error);
-
+    }
   }
-
-};
 
   return (
     <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-4">
 
       {/* Header */}
-      <div className="flex items-center gap-3 mb-3">
+
+        <div className="flex items-center mb-3 gap-3">
+
+        
         <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600">
           <img src={post.user.avatar} onClick={() => navigate(`/profile/${post.user._id}`)} alt="" />
         </div>
         <div className="font-medium text-gray-800">
           {post.user.name}
         </div>
-      </div>
+                {isOwner && (
+  <button
+    onClick={handleDelete}
+    className="
+      w-8 h-8
+      flex items-center justify-center
+      rounded-full
+      bg-red-50
+      hover:bg-red-100
+      text-red-500
+      transition-all duration-200
+    ml-10
+      "
+  >
+    🗑️
+  </button>
+)}
+        </div>
 
+   
       {/* Media */}
       {post.mediaType?.startsWith("image/") ? (
         <img
@@ -256,6 +300,6 @@ const handleLike = async () => {
           </motion.div>
         )}
       </AnimatePresence>
-
+        
     </div>)
 };

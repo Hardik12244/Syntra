@@ -1,4 +1,4 @@
-
+import type {  Dispatch, SetStateAction } from "react";
 export type Comment = {
     _id: string;
     user: {
@@ -30,4 +30,5 @@ export type Post = {
 export type PostCardProps = {
     post: Post;
     userId: string;
+    setPosts?: Dispatch<SetStateAction<Post[]>>;
 };

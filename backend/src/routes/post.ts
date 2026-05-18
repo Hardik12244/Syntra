@@ -17,7 +17,7 @@ postRouter.post('/',authMiddleware,upload.single("media"),createPost)
 
 postRouter.patch('/:id',authMiddleware,updatePost)
 
-postRouter.delete('/:id',authMiddleware,deletePost)
+postRouter.delete('/delete/:id',authMiddleware,deletePost)
 
 postRouter.post('/:id/comment',authMiddleware,createComment)
 

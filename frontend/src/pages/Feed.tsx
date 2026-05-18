@@ -31,7 +31,9 @@ function Feed({ userId }: Props) {
     if (!file) return;
     formData.append("media", file)
 
-    axios.post(`http://localhost:3000/post/`, formData)
+    axios.post(`http://localhost:3000/post/`, formData,{
+      withCredentials:true,
+    })
       .then(() => {
         console.log("post uploaded")
 
@@ -106,6 +108,7 @@ function Feed({ userId }: Props) {
                   key={e._id}
                   post={e}
                   userId={userId}
+                  setPosts={setPosts}
                 />
               ))}
             </div>
