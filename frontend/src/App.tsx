@@ -8,10 +8,10 @@ import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
-import Matches from "./pages/Matches";
 import Messages from "./pages/Messages";
 import OnBoarding from './pages/OnBoarding';
 import PublicProfile from './pages/PublicProfile';
+import Connections from './pages/Connections';
 
 
 function App() {
@@ -49,7 +49,7 @@ function App() {
                   <Route path="/" element={<Feed userId={user._id} />} />
                   <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
                   <Route path="/search" element={<Search />} />
-                  <Route path="/matches" element={<Matches />} />
+                  <Route path="/matches" element={<Connections />} />
                   <Route path="/messages" element={<Messages user={user}/>} />
                   <Route path="/profile/:id" element={<PublicProfile/>} />
                 </Routes>

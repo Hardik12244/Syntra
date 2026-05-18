@@ -20,6 +20,9 @@ type User = {
 export default function PublicProfile() {
   const { id } = useParams();
   const [user, setUser] = useState<User | null>(null);
+  const [crushed, setCrushed] = useState(false);
+  const [showPosts, setShowPosts] = useState(false);
+
   useEffect(() => {
     if (!id) return;
 
@@ -37,6 +40,28 @@ export default function PublicProfile() {
     );
   }
 
+
+  const handleCrush = async () => {
+    try {
+
+      const res = await axios.post(
+        `http://localhost:3000/crush/toggle`,
+        { receiver: user._id },
+        {
+          withCredentials: true,
+        }
+      );
+
+      setCrushed(res.data.crushed);
+      if (res.data.matched) {
+        alert("It's a match!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
   const dockItems = [
     {
       title: "Home",
@@ -44,21 +69,28 @@ export default function PublicProfile() {
       href: "/",
     },
     {
+      title: "Crush",
+     icon: (
+  <MessageCircle
+    size={20}
+    fill={crushed ? "#ec4899" : "transparent"}
+    className={crushed ? "text-pink-500" : ""}
+  />
+),
+      onClick: handleCrush,
+    },
+    {
       title: "Chat",
-      icon: <MessageCircle size={20} />,
-      href: "#",
-    },
-    {
-      title: "Follow",
       icon: <UserPlus size={20} />,
-      href: "#",
+      // onClick: handleChat,
     },
     {
-      title: "Connect",
+      title: "View Posts",
       icon: <Star size={20} />,
-      href: "#",
+      onClick: () => setShowPosts((prev) => !prev),
     },
   ];
+
 
   function getAge(dobString?: string) {
     if (!dobString) return null;
@@ -152,9 +184,6 @@ export default function PublicProfile() {
 
               </div>
             </div>
-
-
-
 
           </div>
 
