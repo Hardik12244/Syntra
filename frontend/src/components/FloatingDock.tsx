@@ -28,7 +28,7 @@ interface FloatingDockProps {
 const playSound = () => {
   const audio = new Audio("/hover.mp3");
   audio.volume = 0.2;
-  audio.play().catch(() => {});
+  audio.play().catch(() => { });
 };
 
 export const FloatingDock = ({
@@ -207,11 +207,13 @@ const FloatingDockDesktop = ({
       }
       className={`
         mx-auto hidden h-16
-        items-end gap-4 rounded-2xl
-        bg-white/70 px-4 pb-3
-        backdrop-blur-xl shadow-2xl
-        border border-white/20
-        md:flex
+  items-end gap-4 rounded-2xl
+  bg-white/30
+  px-4 pb-3
+  backdrop-blur-2xl
+  border border-white/40
+  shadow-[0_8px_32px_rgba(31,38,135,0.12)]
+  md:flex
         ${className}
       `}
     >
@@ -243,30 +245,30 @@ function IconContainer({
 }) {
   let ref = useRef<HTMLDivElement>(null);
 
-let distance = useTransform(
-  mouseX,
-  (val: number) => {
+  let distance = useTransform(
+    mouseX,
+    (val: number) => {
 
-    const bounds =
-      ref.current?.getBoundingClientRect();
+      const bounds =
+        ref.current?.getBoundingClientRect();
 
-    if (!bounds) return -9999;
+      if (!bounds) return -9999;
 
-    return (
-      val -
-      bounds.x -
-      bounds.width / 2
-    );
-  }
-);
+      return (
+        val -
+        bounds.x -
+        bounds.width / 2
+      );
+    }
+  );
 
   let widthTransform = useTransform(
     distance,
     [-150, 0, 150],
     [40, 80, 40],
     {
-    clamp: true,
-  }
+      clamp: true,
+    }
   );
 
   let heightTransform = useTransform(
@@ -274,8 +276,8 @@ let distance = useTransform(
     [-150, 0, 150],
     [40, 80, 40],
     {
-    clamp: true,
-  }
+      clamp: true,
+    }
   );
 
   let widthTransformIcon = useTransform(
@@ -283,8 +285,8 @@ let distance = useTransform(
     [-150, 0, 150],
     [20, 40, 20],
     {
-    clamp: true,
-  }
+      clamp: true,
+    }
   );
 
   let heightTransformIcon = useTransform(
@@ -292,8 +294,8 @@ let distance = useTransform(
     [-150, 0, 150],
     [20, 40, 20],
     {
-    clamp: true,
-  }
+      clamp: true,
+    }
   );
 
   let width = useSpring(widthTransform, {
@@ -350,7 +352,7 @@ let distance = useTransform(
         className="
           relative flex aspect-square
           items-center justify-center
-          rounded-full bg-[#93d1d8]
+          rounded-full bg-white/60 backdrop-blur-xl border border-white/20
           cursor-pointer
         "
       >
@@ -431,7 +433,7 @@ let distance = useTransform(
         className="
           relative flex aspect-square
           items-center justify-center
-          rounded-full bg-[#93d1d8]
+          rounded-full bg-white/60 backdrop-blur-xl border border-white/20
         "
       >
         <AnimatePresence>
