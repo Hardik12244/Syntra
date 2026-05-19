@@ -195,7 +195,7 @@ const FloatingDockDesktop = ({
   items: DockItem[];
   className?: string;
 }) => {
-  let mouseX = useMotionValue(Infinity);
+  let mouseX = useMotionValue(-9999);
 
   return (
     <motion.div
@@ -203,7 +203,7 @@ const FloatingDockDesktop = ({
         mouseX.set(e.pageX)
       }
       onMouseLeave={() =>
-        mouseX.set(Infinity)
+        mouseX.set(-9999)
       }
       className={`
         mx-auto hidden h-16
@@ -250,7 +250,7 @@ let distance = useTransform(
     const bounds =
       ref.current?.getBoundingClientRect();
 
-    if (!bounds) return 0;
+    if (!bounds) return -9999;
 
     return (
       val -
@@ -263,25 +263,37 @@ let distance = useTransform(
   let widthTransform = useTransform(
     distance,
     [-150, 0, 150],
-    [40, 80, 40]
+    [40, 80, 40],
+    {
+    clamp: true,
+  }
   );
 
   let heightTransform = useTransform(
     distance,
     [-150, 0, 150],
-    [40, 80, 40]
+    [40, 80, 40],
+    {
+    clamp: true,
+  }
   );
 
   let widthTransformIcon = useTransform(
     distance,
     [-150, 0, 150],
-    [20, 40, 20]
+    [20, 40, 20],
+    {
+    clamp: true,
+  }
   );
 
   let heightTransformIcon = useTransform(
     distance,
     [-150, 0, 150],
-    [20, 40, 20]
+    [20, 40, 20],
+    {
+    clamp: true,
+  }
   );
 
   let width = useSpring(widthTransform, {

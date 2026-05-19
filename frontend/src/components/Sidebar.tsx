@@ -74,7 +74,7 @@ export default function Sidebar() {
 
                   {[
                     { name: "Search", path: "/search" },
-                    { name: "Matches", path: "/matches", badge: "3" },
+                    { name: "Connections", path: "/matches", badge: "3" },
                     { name: "Messages", path: "/messages", badge: "8" },
                   ].map((item) => (
                     <NavLink
