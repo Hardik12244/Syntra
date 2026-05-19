@@ -89,7 +89,7 @@ export default function Profile({ user, setUser }: Props) {
       setLoading(false);
     }
   };
-
+  
   if (!user) return <div className="p-6">Loading...</div>;
 
   useEffect(() => {

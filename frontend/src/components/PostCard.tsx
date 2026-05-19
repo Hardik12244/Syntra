@@ -11,7 +11,11 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
   const isLiked = likes.includes(userId);
   const navigate = useNavigate();
 
-  const isOwner = post.user._id === userId;
+
+  const isOwner =
+   post.user?._id?.toString()
+   === userId;
+
 
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState(post.comments || []);

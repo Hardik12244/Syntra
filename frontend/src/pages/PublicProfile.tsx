@@ -5,7 +5,8 @@ import { FloatingDock } from "../components/FloatingDock";
 import { Home, MessageCircle, UserPlus, Star, Heart } from "lucide-react";
 import { BoatAnimation } from "../components/BoatAnimation";
 import { motion, AnimatePresence } from "framer-motion";
-
+import type { Post } from "../types/Post";
+import PostCard from "../components/PostCard";
 type User = {
   _id: string;
   name: string;
@@ -16,13 +17,41 @@ type User = {
   gender?: string,
   interests: string[];
 };
-
-export default function PublicProfile() {
+type Props = {
+  currentUserId: string;
+};
+export default function PublicProfile({ currentUserId }: Props) {
   const { id } = useParams();
   const [user, setUser] = useState<User | null>(null);
   const [crushed, setCrushed] = useState(false);
   const [showPosts, setShowPosts] = useState(false);
   const [showMatch, setShowMatch] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
+
+
+  useEffect(() => {
+
+    const fetchPosts = async () => {
+      try {
+        if (!id) return;
+        const response = await axios.get(
+          `http://localhost:3000/post/user/${id}`,
+          {
+            withCredentials: true
+          }
+        );
+
+        setPosts(response.data);
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchPosts();
+
+  }, []);
+
 
   useEffect(() => {
     if (!id) return;
@@ -67,6 +96,7 @@ export default function PublicProfile() {
 
   }
 
+
   const dockItems = [
     {
       title: "Home",
@@ -79,17 +109,7 @@ export default function PublicProfile() {
         <div className="relative flex items-center justify-center">
           {crushed && (
             <div
-              className="
-          absolute
-          w-11 h-11
-          rounded-full
-          bg-gradient-to-r
-          from-pink-400
-          to-fuchsia-500
-          blur-md
-          opacity-50
-          animate-pulse
-        "
+              className=" absolute w-11 h-11 rounded-full bg-gradient-to-r from-pink-400 to-fuchsia-500 blur-md opacity-50 animate-pulse "
             />
           )}
 
@@ -117,12 +137,7 @@ export default function PublicProfile() {
         transition-all duration-500
 
         ${crushed
-                ? `
-              bg-white/20
-              backdrop-blur-xl
-              scale-110
-              shadow-lg shadow-pink-500/20
-            `
+                ? ` bg-white/20 backdrop-blur-xl scale-110 shadow-lg shadow-pink-500/20 `
                 : ""
               }
       `}
@@ -369,7 +384,26 @@ export default function PublicProfile() {
 
         </div>
 
-
+        <AnimatePresence>
+          {showPosts && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.35 }}
+              className="mt-10 grid grid-cols-2 gap-6 mx-auto"
+            >
+              {posts.map((post) => (
+                <PostCard
+                  key={post._id}
+                  post={post}
+                  userId={currentUserId}
+                  setPosts={setPosts}
+                />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </>
 
