@@ -4,7 +4,7 @@ import Feed from './pages/Feed'
 import Navbar from './components/Navbar';
 import axios from 'axios';
 import LandingPage from './pages/LandingPage';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useParams } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
@@ -16,6 +16,7 @@ import Connections from './pages/Connections';
 
 function App() {
   const [user, setUser] = useState<any>(null)
+    const { currentUserId } = useParams();
 
   useEffect(() => {
     axios
@@ -51,7 +52,8 @@ function App() {
                   <Route path="/search" element={<Search />} />
                   <Route path="/matches" element={<Connections />} />
                   <Route path="/messages" element={<Messages user={user}/>} />
-                  <Route path="/profile/:id" element={<PublicProfile/>} />
+                  <Route path="/profile/:id" element={<PublicProfile currentUserId={currentUserId}/>} />
+                  <Route path="/messages/:receiverId" element={<Messages />}/>
                 </Routes>
               </div>
 

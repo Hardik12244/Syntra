@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { FloatingDock } from "../components/FloatingDock";
-import { Home, MessageCircle, UserPlus, Star, Heart } from "lucide-react";
+import { Home, MessageCircle, UserPlus, Star, Heart, LayoutGrid } from "lucide-react";
 import { BoatAnimation } from "../components/BoatAnimation";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Post } from "../types/Post";
@@ -27,7 +27,7 @@ export default function PublicProfile({ currentUserId }: Props) {
   const [showPosts, setShowPosts] = useState(false);
   const [showMatch, setShowMatch] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
-
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -61,7 +61,31 @@ export default function PublicProfile({ currentUserId }: Props) {
       .then((res) => setUser(res.data))
       .catch((err) => console.error(err));
   }, [id]);
+useEffect(() => {
 
+  if (!id) return;
+
+  const fetchCrushStatus = async () => {
+
+    try {
+
+      const res = await axios.get(
+        `http://localhost:3000/crush/status/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setCrushed(res.data.crushed);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchCrushStatus();
+
+}, [id]);
   if (!user) {
     return (
       <div className="p-10 text-center text-gray-500 ">
@@ -96,6 +120,15 @@ export default function PublicProfile({ currentUserId }: Props) {
 
   }
 
+const handleChat = () => {
+
+  navigate("/messages", {
+    state: {
+      selectedUser: user,
+    },
+  });
+
+};
 
   const dockItems = [
     {
@@ -164,12 +197,75 @@ export default function PublicProfile({ currentUserId }: Props) {
     },
     {
       title: "Chat",
-      icon: <UserPlus size={20} />,
-      // onClick: handleChat,
+      icon: (
+  <div className="relative flex items-center justify-center">
+
+    <div
+      className="
+        absolute
+        w-3 h-3
+        rounded-full
+        bg-emerald-400
+        top-0 right-0
+        animate-ping
+      "
+    />
+
+    <div
+      className="
+        relative z-10
+        p-2 rounded-full
+        bg-emerald-500/10
+        backdrop-blur-xl
+      "
+    >
+      <MessageCircle
+        size={20}
+        className="
+          text-black
+          drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]
+        "
+      />
+    </div>
+
+  </div>
+),
+      onClick: handleChat,
     },
     {
       title: "View Posts",
-      icon: <Star size={20} />,
+      icon: (
+  <div className="relative flex items-center justify-center">
+
+    <div
+      className="
+        absolute
+        inset-0
+        rounded-full
+        bg-yellow-400/20
+        blur-md
+        animate-pulse
+      "
+    />
+
+    <div
+      className="
+        relative z-10
+        p-2 rounded-full
+        bg-yellow-500/10
+      "
+    >
+      <LayoutGrid
+  size={20}
+  className="
+    text-black
+    drop-shadow-[0_0_10px_rgba(139,92,246,0.8)]
+  "
+/>
+    </div>
+
+  </div>
+),
       onClick: () => setShowPosts((prev) => !prev),
     },
   ];
@@ -196,8 +292,6 @@ export default function PublicProfile({ currentUserId }: Props) {
 
     return age;
   }
-
-
 
   return (
     <>
