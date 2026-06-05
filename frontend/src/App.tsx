@@ -12,6 +12,7 @@ import Messages from "./pages/Messages";
 import OnBoarding from './pages/OnBoarding';
 import PublicProfile from './pages/PublicProfile';
 import Connections from './pages/Connections';
+import CrushesPage from './pages/CrushesPage';
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
                   <Route path="/messages" element={<Messages user={user}/>} />
                   <Route path="/profile/:id" element={<PublicProfile currentUserId={currentUserId}/>} />
                   <Route path="/messages/:receiverId" element={<Messages />}/>
+                  <Route path="/crushes" element={<CrushesPage />}/>
                 </Routes>
               </div>
 

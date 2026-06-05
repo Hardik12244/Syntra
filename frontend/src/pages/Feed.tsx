@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react'
 import PostCard from '../components/PostCard'
 import type { Post } from "../types/Post";
-// import DailyMatchPopup from '../components/DailtMatchPopup';
+import ActivityCenter from "../components/ActivityCenter";
+
 type Props = {
   userId: string;
 };
@@ -31,8 +32,8 @@ function Feed({ userId }: Props) {
     if (!file) return;
     formData.append("media", file)
 
-    axios.post(`http://localhost:3000/post/`, formData,{
-      withCredentials:true,
+    axios.post(`http://localhost:3000/post/`, formData, {
+      withCredentials: true,
     })
       .then(() => {
         console.log("post uploaded")
@@ -40,7 +41,7 @@ function Feed({ userId }: Props) {
         setIsOpen(false);
 
         setCaption("");
-      setFile(null);
+        setFile(null);
 
         axios.get("http://localhost:3000/post")
           .then((res) => {
@@ -114,11 +115,16 @@ function Feed({ userId }: Props) {
             </div>
           </div>
 
-          <div className="w-[200px]" />
+          <div className="w-[300px] pl-6">
 
+            <div className="sticky top-6">
+
+              <ActivityCenter />
+
+            </div>
+
+          </div>
         </div>
-
-        {/* <DailyMatchPopup /> */}
 
       </div>
 

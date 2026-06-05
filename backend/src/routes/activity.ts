@@ -1,13 +1,33 @@
 import express from "express";
-import { getActivitySummary } from "../controllers/activity";
-import {authMiddleware} from "../middlewares/auth";
+import {
+  getActivitySummary,
+  getLikesActivity,
+  getCommentsActivity,
+  getCrushActivity,
+} from "../controllers/activity";
 
-const activityRouter = express.Router();
+import { authMiddleware } from "../middlewares/auth";
 
-activityRouter.get(
-  "/",
+const router = express.Router();
+
+router.get("/", authMiddleware, getActivitySummary);
+
+router.get(
+  "/likes",
   authMiddleware,
-  getActivitySummary
+  getLikesActivity
 );
 
-export default activityRouter;
+router.get(
+  "/comments",
+  authMiddleware,
+  getCommentsActivity
+);
+
+router.get(
+  "/crushes",
+  authMiddleware,
+  getCrushActivity
+);
+
+export default router;
