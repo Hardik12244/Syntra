@@ -95,14 +95,16 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
 
       {/* Header */}
 
-        <div className="flex items-center mb-3 gap-3">
+        <div className="flex items-center mb-3 justify-between">
 
-        
+          <div className="flex items-center gap-3">
+
         <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600">
           <img src={post.user.avatar} onClick={() => navigate(`/profile/${post.user._id}`)} alt="" />
         </div>
         <div className="font-medium text-gray-800">
           {post.user.name}
+        </div>
         </div>
                 {isOwner && (
   <button

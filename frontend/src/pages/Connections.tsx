@@ -6,7 +6,8 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
+import type { User } from "../types/User"
 type UserCard = {
   _id: string;
   name: string;
@@ -14,8 +15,22 @@ type UserCard = {
   college?: string;
 };
 
-export default function Connections() {
 
+
+export default function Connections() {
+  const [user, setUser] = useState<User | null>(null);
+
+  const navigate = useNavigate();
+
+  const handleChat = () => {
+
+    navigate("/messages", {
+      state: {
+        selectedUser: user,
+      },
+    });
+
+  };
   const [activeTab, setActiveTab] = useState<
     "crushes" | "matches"
   >("crushes");
@@ -119,10 +134,9 @@ export default function Connections() {
               }
               className={`
                 px-6 py-3 rounded-2xl flex items-center gap-2 transition-all duration-300
-                ${
-                  activeTab === "crushes"
-                    ? "bg-pink-500 text-white shadow-lg scale-105"
-                    : "bg-white text-gray-600 hover:bg-pink-50"
+                ${activeTab === "crushes"
+                  ? "bg-pink-500 text-white shadow-lg scale-105"
+                  : "bg-white text-gray-600 hover:bg-pink-50"
                 }
               `}
             >
@@ -137,10 +151,9 @@ export default function Connections() {
               }
               className={`
                 px-6 py-3 rounded-2xl flex items-center gap-2 transition-all duration-300
-                ${
-                  activeTab === "matches"
-                    ? "bg-cyan-500 text-white shadow-lg scale-105"
-                    : "bg-white text-gray-600 hover:bg-cyan-50"
+                ${activeTab === "matches"
+                  ? "bg-cyan-500 text-white shadow-lg scale-105"
+                  : "bg-white text-gray-600 hover:bg-cyan-50"
                 }
               `}
             >
@@ -198,6 +211,8 @@ export default function Connections() {
 
                 <img
                   src={user.avatar}
+                  onClick={() => navigate(`/profile/${user._id}`)}
+
                   className="w-16 h-16 rounded-2xl object-cover"
                 />
 
@@ -245,7 +260,7 @@ export default function Connections() {
 
               {/* ACTION */}
 
-              <button className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-medium shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
+              <button onClick={handleChat} className="mt-6 w-full py-3 rounded-2xl bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-medium shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
 
                 <MessageCircle size={18} />
 

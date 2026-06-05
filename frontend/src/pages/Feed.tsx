@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react'
 import PostCard from '../components/PostCard'
 import type { Post } from "../types/Post";
-import DailyMatchPopup from '../components/DailtMatchPopup';
+// import DailyMatchPopup from '../components/DailtMatchPopup';
 type Props = {
   userId: string;
 };
@@ -118,7 +118,7 @@ function Feed({ userId }: Props) {
 
         </div>
 
-        <DailyMatchPopup />
+        {/* <DailyMatchPopup /> */}
 
       </div>
 

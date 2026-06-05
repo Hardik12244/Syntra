@@ -1,9 +1,10 @@
 import { io, Socket } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Messages({ user }: any) {
+  const navigate = useNavigate();
 
   const [chatUser, setChatUser] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -117,6 +118,7 @@ useEffect(() => {
                 <img
                   src={person.avatar}
                   alt=""
+                  onClick={() => navigate(`/profile/${chatUser._id}`)}
                   className="w-12 h-12 rounded-full object-cover"
                 />
 

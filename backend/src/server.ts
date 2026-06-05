@@ -11,6 +11,7 @@ import matchRoutes from "./routes/match";
 import authRoutes from "./routes/auth"
 import searchRoutes from "./routes/search"
 import messageRoutes from "./routes/message"
+import activityRouter from "./routes/activity";
 import { initSocket } from "./socket/socket";
 import cors from "cors";
 
@@ -45,6 +46,7 @@ app.use("/match", matchRoutes);
 app.use("/auth", authRoutes);
 app.use("/search", searchRoutes);
 app.use("/message", messageRoutes);
+app.use("/activity", activityRouter);
 
 const PORT = process.env.PORT || 3000;
 
