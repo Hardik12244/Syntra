@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { API_URL, getMediaUrl } from "../config/api";
 
 const INTEREST_OPTIONS = [
   "Music",
@@ -53,7 +54,7 @@ export default function OnBoarding({ user, setUser }: any) {
       }
 
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user/profile`,
+        `${API_URL}/user/profile`,
         data,
         {
           withCredentials: true,
@@ -93,7 +94,7 @@ export default function OnBoarding({ user, setUser }: any) {
                   src={
                     formData.avatar
                       ? URL.createObjectURL(formData.avatar)
-                      : user?.avatar || "https://via.placeholder.com/150"
+                      : getMediaUrl(user?.avatar) || "https://via.placeholder.com/150"
                   }
                   className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-md border border-gray-200 group-hover:opacity-80 transition"
                   alt=""
@@ -185,10 +186,9 @@ export default function OnBoarding({ user, setUser }: any) {
                     whileHover={{ scale: 1.05 }}
                     onClick={() => toggleInterest(item)}
                     className={`px-3 py-1 text-xs rounded-full border transition shadow-sm
-                      ${
-                        isSelected
-                          ? "bg-indigo-500 text-white border-indigo-500 shadow-md"
-                          : "bg-indigo-100 text-indigo-700 border-indigo-200 hover:bg-indigo-200"
+                      ${isSelected
+                        ? "bg-indigo-500 text-white border-indigo-500 shadow-md"
+                        : "bg-indigo-100 text-indigo-700 border-indigo-200 hover:bg-indigo-200"
                       }
                     `}
                   >

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import PostCard from './PostCard';
 import type { Post } from '../types/Post';
+import { API_URL } from '../config/api';
 
 type TrendingPostsProps = {
   userId: string;
@@ -13,7 +14,7 @@ function TrendingPosts({ userId }: TrendingPostsProps) {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/search/trending`);
+        const res = await axios.get(`${API_URL}/search/trending`);
         setPosts(res.data);
       } catch {
         // ignore error

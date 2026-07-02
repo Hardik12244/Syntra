@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import type { User } from "../types/User";
 import type { Post } from "../types/Post";
+import { API_URL, getMediaUrl } from "../config/api";
 import { motion } from "framer-motion";
 import PostCard from "../components/PostCard";
 import { useNavigate } from "react-router-dom";
@@ -31,7 +32,7 @@ function SearchResults({ query, userId }: Props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/search/result`, {
+        const res = await axios.get(`${API_URL}/search/result`, {
           params: { q: query },
         });
         setResults(res.data);
@@ -82,11 +83,10 @@ function SearchResults({ query, userId }: Props) {
             <button
               key={t}
               onClick={() => setType(t)}
-              className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium capitalize transition ${
-                type === t
+              className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium capitalize transition ${type === t
                   ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+                }`}
             >
               {t}
             </button>
@@ -127,7 +127,7 @@ function SearchResults({ query, userId }: Props) {
                   className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm cursor-pointer hover:shadow-md transition"
                 >
                   <img
-                    src={user.avatar || "https://via.placeholder.com/150"}
+                    src={getMediaUrl(user.avatar) || "https://via.placeholder.com/150"}
                     className="w-12 h-12 rounded-full object-cover shrink-0"
                     alt=""
                   />

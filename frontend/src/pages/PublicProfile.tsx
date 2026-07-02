@@ -7,6 +7,7 @@ import { BoatAnimation } from "../components/BoatAnimation";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Post } from "../types/Post";
 import PostCard from "../components/PostCard";
+import { API_URL, getMediaUrl } from "../config/api";
 
 type User = {
   _id: string;
@@ -37,7 +38,7 @@ export default function PublicProfile({ currentUserId }: Props) {
       try {
         if (!id) return;
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post/user/${id}`,
+          `${API_URL}/post/user/${id}`,
           { withCredentials: true }
         );
         setPosts(response.data);
@@ -53,9 +54,9 @@ export default function PublicProfile({ currentUserId }: Props) {
     if (!id) return;
 
     axios
-      .get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user/${id}`)
+      .get(`${API_URL}/user/${id}`)
       .then((res) => setUser(res.data))
-      .catch(() => {});
+      .catch(() => { });
   }, [id]);
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function PublicProfile({ currentUserId }: Props) {
     const fetchCrushStatus = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/crush/status/${id}`,
+          `${API_URL}/crush/status/${id}`,
           { withCredentials: true }
         );
         setCrushed(res.data.crushed);
@@ -87,7 +88,7 @@ export default function PublicProfile({ currentUserId }: Props) {
   const handleCrush = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/crush/toggle`,
+        `${API_URL}/crush/toggle`,
         { receiver: user._id },
         { withCredentials: true }
       );
@@ -132,19 +133,17 @@ export default function PublicProfile({ currentUserId }: Props) {
             />
           )}
           <div
-            className={`relative z-10 rounded-full p-2 transition-all duration-500 ${
-              crushed
+            className={`relative z-10 rounded-full p-2 transition-all duration-500 ${crushed
                 ? "bg-white/20 backdrop-blur-xl scale-110 shadow-lg shadow-pink-500/20"
                 : ""
-            }`}
+              }`}
           >
             <Heart
               size={20}
-              className={`transition-all duration-300 ${
-                crushed
+              className={`transition-all duration-300 ${crushed
                   ? "text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]"
                   : "text-gray-600"
-              }`}
+                }`}
             />
           </div>
         </div>
@@ -234,7 +233,7 @@ export default function PublicProfile({ currentUserId }: Props) {
             <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center md:items-start">
               <div className="flex flex-col gap-y-3 items-center shrink-0">
                 <img
-                  src={user.avatar || "https://via.placeholder.com/150"}
+                  src={getMediaUrl(user.avatar) || "https://via.placeholder.com/150"}
                   className="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl object-cover shadow"
                   alt=""
                 />

@@ -13,6 +13,7 @@ import OnBoarding from './pages/OnBoarding';
 import PublicProfile from './pages/PublicProfile';
 import Connections from './pages/Connections';
 import CrushesPage from './pages/CrushesPage';
+import { API_URL } from './config/api';
 
 function App() {
   const [user, setUser] = useState<any>(null);
@@ -20,7 +21,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/me`, {
+      .get(`${API_URL}/auth/me`, {
         withCredentials: true,
       })
       .then((res) => {

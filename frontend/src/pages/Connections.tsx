@@ -3,6 +3,7 @@ import axios from "axios";
 import { Heart, Sparkles, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { API_URL, getMediaUrl } from "../config/api";
 
 type UserCard = {
   _id: string;
@@ -31,10 +32,10 @@ export default function Connections() {
     const fetchConnections = async () => {
       try {
         const [crushRes, matchRes] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/crush/get`, {
+          axios.get(`${API_URL}/crush/get`, {
             withCredentials: true,
           }),
-          axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/match/get`, {
+          axios.get(`${API_URL}/match/get`, {
             withCredentials: true,
           }),
         ]);
@@ -84,10 +85,9 @@ export default function Connections() {
               onClick={() => setActiveTab("crushes")}
               className={`
                 px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl flex items-center gap-2 text-sm sm:text-base transition-all duration-300
-                ${
-                  activeTab === "crushes"
-                    ? "bg-pink-500 text-white shadow-lg scale-105"
-                    : "bg-white text-gray-600 hover:bg-pink-50"
+                ${activeTab === "crushes"
+                  ? "bg-pink-500 text-white shadow-lg scale-105"
+                  : "bg-white text-gray-600 hover:bg-pink-50"
                 }
               `}
             >
@@ -99,10 +99,9 @@ export default function Connections() {
               onClick={() => setActiveTab("matches")}
               className={`
                 px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl flex items-center gap-2 text-sm sm:text-base transition-all duration-300
-                ${
-                  activeTab === "matches"
-                    ? "bg-cyan-500 text-white shadow-lg scale-105"
-                    : "bg-white text-gray-600 hover:bg-cyan-50"
+                ${activeTab === "matches"
+                  ? "bg-cyan-500 text-white shadow-lg scale-105"
+                  : "bg-white text-gray-600 hover:bg-cyan-50"
                 }
               `}
             >
@@ -140,7 +139,7 @@ export default function Connections() {
               {/* USER */}
               <div className="flex items-center gap-3 sm:gap-4 min-w-0">
                 <img
-                  src={user.avatar}
+                  src={getMediaUrl(user.avatar)}
                   onClick={() => navigate(`/profile/${user._id}`)}
                   className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl object-cover cursor-pointer shrink-0"
                   alt=""

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { API_URL, getMediaUrl } from "../config/api";
 
 export default function CrushActivity() {
   const [crushes, setCrushes] = useState<any[]>([]);
@@ -7,7 +8,7 @@ export default function CrushActivity() {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/activity/crushes`,
+        `${API_URL}/activity/crushes`,
         {
           withCredentials: true,
         }
@@ -38,7 +39,7 @@ export default function CrushActivity() {
         >
           <div className="flex items-center gap-3">
             <img
-              src={crush.sender.avatar}
+              src={getMediaUrl(crush.sender.avatar)}
               className="w-12 h-12 rounded-full object-cover"
             />
 

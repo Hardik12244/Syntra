@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { API_URL } from "../config/api";
 
 const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
     <motion.div
@@ -83,7 +84,7 @@ export default function LandingPage() {
                                 onSuccess={async (credentialResponse) => {
                                     try {
                                         await axios.post(
-                                            `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/google`,
+                                            `${API_URL}/auth/google`,
                                             {
                                                 token: credentialResponse.credential,
                                             },

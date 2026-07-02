@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { API_URL, getMediaUrl } from "../config/api";
 
 export default function CommentsActivity() {
   const [comments, setComments] =
@@ -8,7 +9,7 @@ export default function CommentsActivity() {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/activity/comments`,
+        `${API_URL}/activity/comments`,
         {
           withCredentials: true,
         }
@@ -39,7 +40,7 @@ export default function CommentsActivity() {
         >
           <div className="flex items-start gap-3">
             <img
-              src={comment.user.avatar}
+              src={getMediaUrl(comment.user.avatar)}
               className="w-12 h-12 rounded-full object-cover"
             />
 

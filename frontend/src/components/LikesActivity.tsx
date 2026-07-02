@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { API_URL, getMediaUrl } from "../config/api";
 
 export default function LikesActivity() {
   const [likes, setLikes] = useState<any[]>([]);
@@ -7,7 +8,7 @@ export default function LikesActivity() {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/activity/likes`,
+        `${API_URL}/activity/likes`,
         {
           withCredentials: true,
         }
@@ -38,7 +39,7 @@ export default function LikesActivity() {
         >
           <div className="flex items-center gap-3">
             <img
-              src={like.user.avatar}
+              src={getMediaUrl(like.user.avatar)}
               className="w-12 h-12 rounded-full object-cover"
             />
 

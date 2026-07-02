@@ -4,6 +4,7 @@ import axios from "axios";
 import type { User } from '../types/User';
 import type { Post } from "../types/Post";
 import PostCard from "../components/PostCard";
+import { API_URL, getMediaUrl } from "../config/api";
 
 type Props = {
   user: any;
@@ -34,7 +35,7 @@ export default function Profile({ user, setUser }: Props) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/me`, {
+        const res = await axios.get(`${API_URL}/auth/me`, {
           withCredentials: true,
         });
 
@@ -67,7 +68,7 @@ export default function Profile({ user, setUser }: Props) {
       setLoading(true);
 
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user/profile`,
+        `${API_URL}/user/profile`,
         formData,
         { withCredentials: true }
       );
@@ -93,7 +94,7 @@ export default function Profile({ user, setUser }: Props) {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post/user/${user._id}`,
+          `${API_URL}/post/user/${user._id}`,
           {
             withCredentials: true,
           }
@@ -129,7 +130,7 @@ export default function Profile({ user, setUser }: Props) {
                 className="relative"
               >
                 <img
-                  src={user?.avatar || "https://via.placeholder.com/150"}
+                  src={getMediaUrl(user?.avatar) || "https://via.placeholder.com/150"}
                   className="w-28 h-28 sm:w-32 sm:h-32 rounded-[28px] object-cover shadow-xl border border-black/5"
                   alt=""
                 />
@@ -194,11 +195,10 @@ export default function Profile({ user, setUser }: Props) {
                   whileTap={{ scale: 0.97 }}
                   whileHover={{ y: -1 }}
                   className={`h-11 px-5 sm:px-6 rounded-2xl text-sm font-medium transition-all shadow-sm whitespace-nowrap self-start sm:self-auto
-                ${
-                  isEditing
-                    ? "bg-black text-white"
-                    : "bg-[#111] text-white"
-                }`}
+                ${isEditing
+                      ? "bg-black text-white"
+                      : "bg-[#111] text-white"
+                    }`}
                 >
                   {isEditing
                     ? loading

@@ -71,8 +71,7 @@ async function updateProfile(req: Request, res: Response) {
 
         const updateData: any = {};
         if (req.file) {
-            const hostUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get("host")}`;
-            updateData.avatar = `${hostUrl}/uploads/${req.file.filename}`;
+            updateData.avatar = `uploads/${req.file.filename}`;
         }
         if (name) updateData.name = name;
         if (college) updateData.college = college;

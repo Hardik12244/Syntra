@@ -3,6 +3,7 @@ import type { PostCardProps } from "../types/Post";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_URL, getMediaUrl } from "../config/api";
 
 export default function PostCard({ post, userId, setPosts }: PostCardProps) {
   const [likes, setLikes] = useState(post.likes || []);
@@ -15,22 +16,10 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
   const [comments, setComments] = useState(post.comments || []);
   const [showComments, setShowComments] = useState(false);
 
-  const getMediaUrl = (media?: string) => {
-    if (!media) return "";
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
-    if (media.includes("localhost:3000")) {
-      return media.replace(/http:\/\/localhost:3000[\/\\]*/, `${apiUrl}/`);
-    }
-    if (media.startsWith("http://") || media.startsWith("https://") || media.startsWith("data:")) {
-      return media;
-    }
-    return `${apiUrl}/${media.replace(/^[\/\\]+/, "").replace(/\\/g, "/")}`;
-  };
-
   const handleComment = async () => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post/${post._id}/comment`,
+        `${API_URL}/post/${post._id}/comment`,
         { text: commentText },
         { withCredentials: true }
       );
@@ -51,7 +40,7 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post/${post._id}/like`,
+        `${API_URL}/post/${post._id}/like`,
         {},
         { withCredentials: true }
       );
@@ -63,13 +52,13 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post/delete/${post._id}`, {
+      await axios.delete(`${API_URL}/post/delete/${post._id}`, {
         withCredentials: true,
       });
       if (setPosts) {
         setPosts((prev) => prev.filter((p) => p._id !== post._id));
       }
-    } catch {}
+    } catch { }
   };
 
   return (
@@ -79,7 +68,7 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600 shrink-0 cursor-pointer overflow-hidden">
             <img
-              src={post.user.avatar}
+              src={getMediaUrl(post.user.avatar)}
               onClick={() => navigate(`/profile/${post.user._id}`)}
               alt=""
               className="w-full h-full object-cover"
@@ -126,9 +115,8 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
       <div className="flex items-center gap-1 mt-3 text-lg sm:text-xl">
         <button
           onClick={handleLike}
-          className={`transition ${
-            isLiked ? "text-pink-500" : "hover:text-pink-500"
-          }`}
+          className={`transition ${isLiked ? "text-pink-500" : "hover:text-pink-500"
+            }`}
         >
           {isLiked ? "❤️" : "🤍"}
         </button>
@@ -198,7 +186,7 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
                   >
                     <div className="flex items-start gap-3 min-w-0">
                       <img
-                        src={comment.user.avatar}
+                        src={getMediaUrl(comment.user.avatar)}
                         alt=""
                         className="w-10 h-10 rounded-full object-cover shrink-0"
                       />

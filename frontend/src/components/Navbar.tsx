@@ -1,5 +1,6 @@
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { API_URL, getMediaUrl } from "../config/api";
 
 type Props = {
   user: any;
@@ -10,7 +11,7 @@ type Props = {
 export default function Navbar({ user, setUser, onToggleMenu }: Props) {
   async function handleLogout() {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/logout`, {}, { withCredentials: true });
+      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
     } catch {
       // ignore logout error
     }
@@ -40,7 +41,7 @@ export default function Navbar({ user, setUser, onToggleMenu }: Props) {
       <div className="flex items-center gap-2 sm:gap-4">
         {user ? (
           <div className="flex gap-2 sm:gap-4 items-center justify-center">
-            <img src={user.avatar} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full shrink-0 object-cover" alt="" />
+            <img src={getMediaUrl(user.avatar)} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full shrink-0 object-cover" alt="" />
             <div className="text-gray-700 font-medium text-xs sm:text-base truncate max-w-[90px] sm:max-w-[150px] md:max-w-none">{user.name}</div>
             <button onClick={handleLogout} className="px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm md:text-base bg-pink-500 text-white rounded-md hover:bg-pink-600 transition shrink-0">
               Logout
@@ -51,7 +52,7 @@ export default function Navbar({ user, setUser, onToggleMenu }: Props) {
             onSuccess={(credentialResponse) => {
               const token = credentialResponse.credential;
               axios
-                .post(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/google`, {
+                .post(`${API_URL}/auth/google`, {
                   token,
                 }, { withCredentials: true })
                 .then((res) => {
@@ -60,9 +61,9 @@ export default function Navbar({ user, setUser, onToggleMenu }: Props) {
                   }
                   setUser(res.data);
                 })
-                .catch(() => {});
+                .catch(() => { });
             }}
-            onError={() => {}}
+            onError={() => { }}
           />
         )}
       </div>

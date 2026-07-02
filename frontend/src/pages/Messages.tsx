@@ -2,6 +2,7 @@ import { io, Socket } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { API_URL, getMediaUrl } from "../config/api";
 
 function Messages({ user }: any) {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function Messages({ user }: any) {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    socketRef.current = io(import.meta.env.VITE_API_URL || "http://localhost:3000", {
+    socketRef.current = io(API_URL, {
       withCredentials: true,
     });
 
@@ -40,7 +41,7 @@ function Messages({ user }: any) {
     const fetchConversation = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/message/conversation`,
+          `${API_URL}/message/conversation`,
           {
             withCredentials: true,
           }
@@ -59,7 +60,7 @@ function Messages({ user }: any) {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/message/${chatUser._id}`,
+          `${API_URL}/message/${chatUser._id}`,
           {
             withCredentials: true,
           }
@@ -94,9 +95,8 @@ function Messages({ user }: any) {
     <div className="flex h-full min-h-[calc(100vh-80px)] bg-white overflow-x-hidden">
       {/* Conversation box UI */}
       <div
-        className={`${
-          chatUser ? "hidden md:block" : "block"
-        } w-full md:w-80 bg-white border-r border-gray-200 flex flex-col shrink-0`}
+        className={`${chatUser ? "hidden md:block" : "block"
+          } w-full md:w-80 bg-white border-r border-gray-200 flex flex-col shrink-0`}
       >
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800">Messages</h2>
@@ -119,7 +119,7 @@ function Messages({ user }: any) {
         `}
             >
               <img
-                src={person.avatar}
+                src={getMediaUrl(person.avatar)}
                 alt=""
                 onClick={(e) => {
                   e.stopPropagation();
@@ -150,7 +150,7 @@ function Messages({ user }: any) {
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden bg-gray-200 shrink-0">
                 <img
-                  src={chatUser?.avatar}
+                  src={getMediaUrl(chatUser?.avatar)}
                   alt=""
                   className="w-full h-full object-cover"
                 />
@@ -178,18 +178,16 @@ function Messages({ user }: any) {
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`flex ${
-                  msg.senderId === user._id ? "justify-end" : "justify-start"
-                }`}
+                className={`flex ${msg.senderId === user._id ? "justify-end" : "justify-start"
+                  }`}
               >
                 <div
                   className={`max-w-[85%] sm:max-w-[70%] px-4 py-3 rounded-2xl text-xs sm:text-sm break-words shadow-sm
               
-              ${
-                msg.senderId === user._id
-                  ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-br-md"
-                  : "bg-white text-gray-800 rounded-bl-md"
-              }
+              ${msg.senderId === user._id
+                      ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-br-md"
+                      : "bg-white text-gray-800 rounded-bl-md"
+                    }
             `}
                 >
                   {msg.text}

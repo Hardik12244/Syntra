@@ -7,6 +7,7 @@ import ActivitySheet from "./ActivitySheet";
 import CrushActivity from "./CrushActivity";
 import LikesActivity from "./LikesActivity";
 import CommentsActivity from "./CommentsActivity";
+import { API_URL } from "../config/api";
 
 type ActivityData = {
   crushes: number;
@@ -24,7 +25,7 @@ export default function ActivityCenter() {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/activity`,
+        `${API_URL}/activity`,
         {
           withCredentials: true,
         }

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import TrendingPosts from "../components/TrendingPosts";
 import SearchResults from "../components/SearchResults";
 import axios from "axios";
+import { API_URL, getMediaUrl } from "../config/api";
 
 function Search() {
   const navigate = useNavigate();
@@ -16,11 +17,11 @@ function Search() {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/me`, {
+      .get(`${API_URL}/auth/me`, {
         withCredentials: true,
       })
       .then((res) => setUser(res.data))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ function Search() {
     const delay = setTimeout(async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/search/suggestions?q=${query}`
+          `${API_URL}/search/suggestions?q=${query}`
         );
 
         setSuggestions(res.data);
@@ -104,7 +105,7 @@ function Search() {
                   className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 hover:bg-gray-100/70 transition cursor-pointer min-w-0"
                 >
                   <img
-                    src={item.avatar}
+                    src={getMediaUrl(item.avatar)}
                     alt=""
                     className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover shrink-0"
                   />

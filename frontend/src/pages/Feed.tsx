@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import PostCard from '../components/PostCard';
 import type { Post } from '../types/Post';
 import ActivityCenter from '../components/ActivityCenter';
+import { API_URL } from '../config/api';
 
 type Props = {
   userId: string;
@@ -15,7 +16,7 @@ function Feed({ userId }: Props) {
   const [caption, setCaption] = useState<string>('');
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post`)
+    axios.get(`${API_URL}/post`)
       .then((res) => {
         setPosts(res.data);
       })
@@ -29,7 +30,7 @@ function Feed({ userId }: Props) {
     if (!file) return;
     formData.append('media', file);
 
-    axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post`, formData, {
+    axios.post(`${API_URL}/post`, formData, {
       withCredentials: true,
     })
       .then(() => {
@@ -37,7 +38,7 @@ function Feed({ userId }: Props) {
         setCaption('');
         setFile(null);
 
-        axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post`)
+        axios.get(`${API_URL}/post`)
           .then((res) => {
             setPosts(res.data);
           })
