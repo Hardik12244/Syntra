@@ -7,7 +7,7 @@ export default function CrushActivity() {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:3000/activity/crushes",
+        `${import.meta.env.VITE_API_URL}/activity/crushes`,
         {
           withCredentials: true,
         }

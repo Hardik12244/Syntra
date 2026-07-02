@@ -2,7 +2,6 @@ import User from "../models/user";
 import { Request, Response } from "express";
 
 async function createUser(req: Request, res: Response) {
-    console.log("BODY:", req.body);
     try {
         const data = req.body
         if (!data.phoneNo || !Array.isArray(data.interests)) {
@@ -23,8 +22,7 @@ async function createUser(req: Request, res: Response) {
         })
         res.status(201).json(user)
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ msg: "error aagya jiiii" })
+        res.status(500).json({ msg: "Server error" })
     }
 }
 
@@ -41,7 +39,6 @@ async function getUser(req: Request, res: Response) {
         return res.status(200).json(user);
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ msg: "Server error" });
     }
 }
@@ -63,7 +60,6 @@ async function getUserByPhone(req: Request, res: Response) {
         res.status(200).json(user);
 
     } catch (error) {
-        console.log(error);
         res.status(500).json({ msg: "Server error" });
     }
 }
@@ -71,11 +67,12 @@ async function getUserByPhone(req: Request, res: Response) {
 async function updateProfile(req: Request, res: Response) {
     try {
         const userId = (req as any).user.id;
-        const { name,college, interests, gender, dateOfBirth, phoneNo } = req.body;
+        const { name, college, interests, gender, dateOfBirth, phoneNo } = req.body;
 
         const updateData: any = {};
         if (req.file) {
-            updateData.avatar = `http://localhost:3000/uploads/${req.file.filename}`;
+            const hostUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get("host")}`;
+            updateData.avatar = `${hostUrl}/uploads/${req.file.filename}`;
         }
         if (name) updateData.name = name;
         if (college) updateData.college = college;
@@ -112,7 +109,6 @@ async function updateProfile(req: Request, res: Response) {
         return res.status(200).json(updatedUser);
 
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ msg: "Server error" });
     }
 }

@@ -31,12 +31,12 @@ function SearchResults({ query, userId }: Props) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:3000/search/result", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/search/result`, {
           params: { q: query },
         });
         setResults(res.data);
-      } catch (err) {
-        console.error(err);
+      } catch {
+        // ignore search error
       } finally {
         setLoading(false);
       }

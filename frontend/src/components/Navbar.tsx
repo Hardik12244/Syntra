@@ -8,7 +8,12 @@ type Props = {
 };
 
 export default function Navbar({ user, setUser, onToggleMenu }: Props) {
-  function handleLogout() {
+  async function handleLogout() {
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/logout`, {}, { withCredentials: true });
+    } catch {
+      // ignore logout error
+    }
     localStorage.removeItem("token");
     setUser(null);
   }
@@ -46,17 +51,18 @@ export default function Navbar({ user, setUser, onToggleMenu }: Props) {
             onSuccess={(credentialResponse) => {
               const token = credentialResponse.credential;
               axios
-                .post("http://localhost:3000/auth/google", {
+                .post(`${import.meta.env.VITE_API_URL}/auth/google`, {
                   token,
-                })
+                }, { withCredentials: true })
                 .then((res) => {
-                  localStorage.setItem("token", res.data.token);
-                  setUser(res.data.user);
-                });
+                  if (res.data.token) {
+                    localStorage.setItem("token", res.data.token);
+                  }
+                  setUser(res.data);
+                })
+                .catch(() => {});
             }}
-            onError={() => {
-              console.log("Login Failed");
-            }}
+            onError={() => {}}
           />
         )}
       </div>

@@ -18,7 +18,7 @@ export default function CreateUser({ setUserId }: Props) {
             .split(",")
             .map((i) => i.trim())
             .filter((i) => i.length > 0);
-        axios.post("http://localhost:3000/user", {
+        axios.post(`${import.meta.env.VITE_API_URL}/user`, {
             name,
             phoneNo,
             email,
@@ -27,20 +27,18 @@ export default function CreateUser({ setUserId }: Props) {
             
         })
             .then((res) => {
-                console.log(res.data);
                 const id = res.data._id
                 localStorage.setItem("userId", id);
                 setUserId(id);
             })
             .catch(async (err) => {
                 if (err.response?.status === 409) {
-                    console.log("User exists, logging in...");
-                    
-                    const res = await axios.get(`http://localhost:3000/user/phone/${phoneNo}`);
-
-                    const id = res.data._id;
-                    localStorage.setItem("userId", id);
-                    setUserId(id);
+                    try {
+                        const res = await axios.get(`${import.meta.env.VITE_API_URL}/user/phone/${phoneNo}`);
+                        const id = res.data._id;
+                        localStorage.setItem("userId", id);
+                        setUserId(id);
+                    } catch {}
                 }
             })
     }

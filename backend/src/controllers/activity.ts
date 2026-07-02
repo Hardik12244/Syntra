@@ -40,9 +40,6 @@ export async function getActivitySummary(
     });
 
   } catch (error) {
-
-    console.log(error);
-
     return res.status(500).json({
       msg: "Server Error"
     });
@@ -87,9 +84,6 @@ export async function getLikesActivity(
     return res.json(result);
 
   } catch (err) {
-
-    console.log(err);
-
     return res.status(500).json({
       msg: "Server Error",
     });
@@ -151,9 +145,6 @@ export async function getCommentsActivity(
     return res.json(result);
 
   } catch (err) {
-
-    console.log(err);
-
     return res.status(500).json({
       msg: "Server Error",
     });
@@ -184,9 +175,6 @@ export async function getCrushActivity(
     return res.json(crushes);
 
   } catch (err) {
-
-    console.log(err);
-
     return res.status(500).json({
       msg: "Server Error",
     });

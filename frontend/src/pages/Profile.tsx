@@ -34,7 +34,7 @@ export default function Profile({ user, setUser }: Props) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/auth/me`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth/me`, {
           withCredentials: true,
         });
 
@@ -67,7 +67,7 @@ export default function Profile({ user, setUser }: Props) {
       setLoading(true);
 
       const res = await axios.put(
-        "http://localhost:3000/user/profile",
+        `${import.meta.env.VITE_API_URL}/user/profile`,
         formData,
         { withCredentials: true }
       );
@@ -93,7 +93,7 @@ export default function Profile({ user, setUser }: Props) {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/post/user/${user._id}`,
+          `${import.meta.env.VITE_API_URL}/post/user/${user._id}`,
           {
             withCredentials: true,
           }

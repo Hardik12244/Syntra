@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/me", {
+      .get(`${import.meta.env.VITE_API_URL}/auth/me`, {
         withCredentials: true,
       })
       .then((res) => {

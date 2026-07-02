@@ -5,40 +5,43 @@ const onlineUsers: Record<string, string> = {};
 
 export const initSocket = (io: Server) => {
     io.on("connection", (socket: Socket) => {
-        console.log("User connected:", socket.id);
-
         socket.on("disconnect", () => {
-            console.log("User disconnected:", socket.id);
+            // cleanup if needed
+            for (const [userId, sId] of Object.entries(onlineUsers)) {
+                if (sId === socket.id) {
+                    delete onlineUsers[userId];
+                    break;
+                }
+            }
         });
 
         socket.on("send_message", async (message) => {
-            const { senderId, receiverId, text } = message;
-            const receiverSocketId = onlineUsers[receiverId];
+            try {
+                const { senderId, receiverId, text } = message;
+                const receiverSocketId = onlineUsers[receiverId];
 
-            const savedMessage = await Message.create({
-                senderId,
-                receiverId,
-                text
-            })
+                const savedMessage = await Message.create({
+                    senderId,
+                    receiverId,
+                    text
+                });
 
-            if (receiverSocketId) {
-
-                io.to(receiverSocketId).emit("receive_message", savedMessage);
+                // Always emit back to sender so UI updates cleanly
                 socket.emit("receive_message", savedMessage);
-            } else {
-                console.log("User not online");
+
+                // If receiver is online and not same socket, send to them
+                if (receiverSocketId && receiverSocketId !== socket.id) {
+                    io.to(receiverSocketId).emit("receive_message", savedMessage);
+                }
+            } catch (err) {
+                socket.emit("error", { msg: "Failed to send message" });
             }
         });
 
         socket.on("join", (userId) => {
-            onlineUsers[userId] = socket.id;
-            console.log("Online users:", onlineUsers);
+            if (userId) {
+                onlineUsers[userId] = socket.id;
+            }
         });
-
-
-
     });
-
-
-
 };

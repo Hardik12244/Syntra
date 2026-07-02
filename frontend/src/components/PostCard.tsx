@@ -15,17 +15,28 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
   const [comments, setComments] = useState(post.comments || []);
   const [showComments, setShowComments] = useState(false);
 
+  const getMediaUrl = (media?: string) => {
+    if (!media) return "";
+    if (media.includes("localhost:3000")) {
+      return media.replace(/http:\/\/localhost:3000[\/\\]*/, `${import.meta.env.VITE_API_URL}/`);
+    }
+    if (media.startsWith("http://") || media.startsWith("https://") || media.startsWith("data:")) {
+      return media;
+    }
+    return `${import.meta.env.VITE_API_URL}/${media.replace(/^[\/\\]+/, "").replace(/\\/g, "/")}`;
+  };
+
   const handleComment = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/post/${post._id}/comment`,
+        `${import.meta.env.VITE_API_URL}/post/${post._id}/comment`,
         { text: commentText },
         { withCredentials: true }
       );
       setComments(response.data.comments);
       setCommentText("");
-    } catch (error) {
-      console.error(error);
+    } catch {
+      // ignore comment error
     }
   };
 
@@ -39,27 +50,25 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/post/${post._id}/like`,
+        `${import.meta.env.VITE_API_URL}/post/${post._id}/like`,
         {},
         { withCredentials: true }
       );
       setLikes(res.data.likes);
-    } catch (error) {
-      console.error(error);
+    } catch {
+      // ignore like error
     }
   };
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3000/post/delete/${post._id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/post/delete/${post._id}`, {
         withCredentials: true,
       });
       if (setPosts) {
         setPosts((prev) => prev.filter((p) => p._id !== post._id));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch {}
   };
 
   return (
@@ -93,13 +102,13 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
       {/* Media */}
       {post.mediaType?.startsWith("image/") ? (
         <img
-          src={`http://localhost:3000/${post.media}`}
+          src={getMediaUrl(post.media)}
           className="w-full h-52 sm:h-64 object-cover rounded-lg mb-3"
           alt=""
         />
       ) : post.mediaType?.startsWith("video/") ? (
         <video
-          src={`http://localhost:3000/${post.media}`}
+          src={getMediaUrl(post.media)}
           controls
           className="w-full h-52 sm:h-64 object-cover rounded-lg mb-3"
         />

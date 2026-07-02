@@ -55,7 +55,7 @@ messageRouter.get('/:chatUserId', authMiddleware, async (req, res) => {
         }).sort({ createdAt: 1 })
         res.json(messages)
     } catch (error) {
-        console.log(error);
+        res.status(500).json({ msg: "Server error" });
     }
 
 })

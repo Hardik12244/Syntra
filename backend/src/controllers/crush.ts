@@ -77,9 +77,6 @@ async function toggleCrush(req: Request, res: Response) {
         });
 
     } catch (error) {
-
-        console.log(error);
-
         return res.status(500).json({
             msg: "Server error"
         });
@@ -101,10 +98,7 @@ async function getCrush(req: Request, res: Response) {
 
     return res.status(200).json(formatted);
 
-    }catch (error) {
-
-    console.log(error);
-
+    } catch (error) {
     return res.status(500).json({
       msg: "Server error"
     });

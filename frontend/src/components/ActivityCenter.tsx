@@ -19,15 +19,12 @@ export default function ActivityCenter() {
     useState<ActivityData | null>(null);
 
   const [open, setOpen] = useState(false);
-
-  const [type, setType] = useState<
-    "likes" | "comments" | "crushes" | null
-  >(null);
+  const [type, setType] = useState<"likes" | "comments" | "crushes" | null>(null);
 
   useEffect(() => {
     axios
       .get(
-        "http://localhost:3000/activity",
+        `${import.meta.env.VITE_API_URL}/activity`,
         {
           withCredentials: true,
         }
@@ -35,7 +32,7 @@ export default function ActivityCenter() {
       .then((res) => {
         setData(res.data);
       })
-      .catch(console.error);
+      .catch(() => {});
   }, []);
 
   if (!data) {

@@ -16,11 +16,11 @@ function Search() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/me", {
+      .get(`${import.meta.env.VITE_API_URL}/auth/me`, {
         withCredentials: true,
       })
       .then((res) => setUser(res.data))
-      .catch((err) => console.error(err));
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function Search() {
     const delay = setTimeout(async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/search/suggestions?q=${query}`
+          `${import.meta.env.VITE_API_URL}/search/suggestions?q=${query}`
         );
 
         setSuggestions(res.data);

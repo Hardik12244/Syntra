@@ -7,7 +7,8 @@ import jwt from "jsonwebtoken";
 import User from "../models/user";
 
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const clientId = process.env.GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(clientId);
 
 export async function googleAuth(req: Request, res: Response) {
     try {
@@ -15,7 +16,7 @@ export async function googleAuth(req: Request, res: Response) {
 
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID,
+            audience: clientId,
         });
 
         const payload = ticket.getPayload();
@@ -39,19 +40,18 @@ export async function googleAuth(req: Request, res: Response) {
             process.env.JWT_SECRET!,
             { expiresIn: "7d" }
         );
+        const isProd = process.env.NODE_ENV === "production";
         res.cookie("token", jwtToken, {
             httpOnly: true,
-            sameSite: "lax",
-            secure: false,
+            sameSite: isProd ? "none" : "lax",
+            secure: isProd,
         });
 
         res.json(user);
     } catch (err) {
-        console.log(err);
         res.status(500).json({ msg: "Google auth failed" });
     }
 }
-;
 
 export async function getMe(req: Request, res: Response) {
     try {
@@ -61,8 +61,7 @@ export async function getMe(req: Request, res: Response) {
             return res.status(401).json({ msg: "No token" });
         }
 
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!,
-);
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
 
         const user = await User.findById(decoded.id);
 
@@ -71,8 +70,17 @@ export async function getMe(req: Request, res: Response) {
         }
 
         res.json(user);
-
     } catch (error) {
         res.status(401).json({ msg: "Invalid token" });
     }
+}
+
+export async function logout(req: Request, res: Response) {
+    const isProd = process.env.NODE_ENV === "production";
+    res.clearCookie("token", {
+        httpOnly: true,
+        sameSite: isProd ? "none" : "lax",
+        secure: isProd,
+    });
+    res.status(200).json({ msg: "Logged out successfully" });
 }

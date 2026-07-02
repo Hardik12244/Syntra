@@ -83,7 +83,7 @@ export default function LandingPage() {
                                 onSuccess={async (credentialResponse) => {
                                     try {
                                         await axios.post(
-                                            "http://localhost:3000/auth/google",
+                                            `${import.meta.env.VITE_API_URL}/auth/google`,
                                             {
                                                 token: credentialResponse.credential,
                                             },
@@ -92,11 +92,11 @@ export default function LandingPage() {
                                             }
                                         );
                                         window.location.reload();
-                                    } catch (err) {
-                                        console.error(err);
+                                    } catch {
+                                        // login error
                                     }
                                 }}
-                                onError={() => console.error("Login Failed")}
+                                onError={() => {}}
                             />
                         </div>
                     </nav>

@@ -20,9 +20,15 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = [
+    process.env.FRONTEND_URL?.replace(/\/$/, ""),
+    "http://localhost:5173",
+    "https://syntra-mu.vercel.app"
+].filter(Boolean) as string[];
+
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: allowedOrigins,
         credentials: true,
     },
 });
@@ -31,7 +37,7 @@ initSocket(io);
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: allowedOrigins,
         credentials: true,
     })
 );
