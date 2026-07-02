@@ -1,7 +1,11 @@
+import dotenv from "dotenv";
+
+dotenv.config();
 import { Request, Response } from "express";
 import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
 import User from "../models/user";
+
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -32,7 +36,7 @@ export async function googleAuth(req: Request, res: Response) {
 
         const jwtToken = jwt.sign(
             { id: user._id },
-            "secret123",
+            process.env.JWT_SECRET!,
             { expiresIn: "7d" }
         );
         res.cookie("token", jwtToken, {
@@ -51,13 +55,14 @@ export async function googleAuth(req: Request, res: Response) {
 
 export async function getMe(req: Request, res: Response) {
     try {
-        const token = req.cookies.token; // ✅ from cookie
+        const token = req.cookies.token; 
 
         if (!token) {
             return res.status(401).json({ msg: "No token" });
         }
 
-        const decoded: any = jwt.verify(token, "secret123");
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!,
+);
 
         const user = await User.findById(decoded.id);
 
