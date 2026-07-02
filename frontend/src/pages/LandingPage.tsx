@@ -1,18 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
-const Card = ({ children, className = "" }) => (
-    <motion.div
-        whileHover={{ y: -10, transition: { duration: 0.3 } }}
-        className={`bg-white/80 backdrop-blur-xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-[32px] ${className}`}
-    >
-        {children}
-    </motion.div>
-);
-
-const Reveal = ({ children, delay = 0 }) => (
+const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
     <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -78,7 +69,7 @@ export default function LandingPage() {
 
                         <motion.button
                             onClick={() => {
-                                googleRef.current?.querySelector("div[role=button]")?.click();
+                                (googleRef.current?.querySelector("div[role=button]") as HTMLElement)?.click();
                             }}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
@@ -105,21 +96,21 @@ export default function LandingPage() {
                                         console.error(err);
                                     }
                                 }}
-                                onError={() => console.log("Login Failed")}
+                                onError={() => console.error("Login Failed")}
                             />
                         </div>
                     </nav>
 
-                    <section id="Home" className="text-center pt-20 pb-10 px-6">
+                    <section id="Home" className="text-center pt-20 pb-10 px-4 sm:px-6">
                         <Reveal>
-                            <h1 className="text-6xl md:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]">
+                            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1]">
                                 Find your vibe <br />
                                 <span className="bg-gradient-to-r from-pink-500 to-rose-400 bg-clip-text text-transparent">across campus.</span>
                             </h1>
                         </Reveal>
 
                         <Reveal delay={0.2}>
-                            <p className="mt-6 text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
+                            <p className="mt-6 text-base sm:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
                                 The only dating app designed exclusively for students. Safe, verified, and actually fun.
                             </p>
                         </Reveal>
@@ -127,9 +118,9 @@ export default function LandingPage() {
                         <Reveal delay={0.4}>
                             <motion.button
                                 whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(244, 63, 94, 0.3)" }}
-                                className="mt-10 bg-pink-500 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-lg"
+                                className="mt-10 bg-pink-500 text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl font-bold text-base sm:text-lg shadow-lg"
                                 onClick={() => {
-                                    googleRef.current?.querySelector("div[role=button]")?.click();
+                                    (googleRef.current?.querySelector("div[role=button]") as HTMLElement)?.click();
                                 }}
                             >
                                 Join the Waitlist
@@ -151,8 +142,8 @@ export default function LandingPage() {
                         </Reveal>
                     </section>
 
-                    <section id="Testimonials" className="py-24 px-10 bg-slate-50/50">
-                        <div className="flex flex-wrap gap-8 justify-center">
+                    <section id="Testimonials" className="py-20 sm:py-24 px-4 sm:px-10 bg-slate-50/50">
+                        <div className="flex flex-wrap gap-6 sm:gap-8 justify-center">
                             {[1, 2, 3].map((_, i) => (
                                 <motion.div
                                     key={i}
@@ -161,7 +152,7 @@ export default function LandingPage() {
                                     viewport={{ once: true }}
                                     transition={{ delay: i * 0.1 }}
                                     whileHover={{ y: -15, rotateZ: i % 2 === 0 ? 1 : -1 }}
-                                    className="w-[340px] bg-white p-6 rounded-[32px] shadow-[0_30px_60px_rgba(0,0,0,0.06)] border border-slate-100"
+                                    className="w-full max-w-[340px] bg-white p-6 rounded-[32px] shadow-[0_30px_60px_rgba(0,0,0,0.06)] border border-slate-100"
                                 >
                                     <div className="h-48 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 mb-6 relative overflow-hidden">
                                         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-xs font-bold text-slate-800 shadow-sm">
@@ -182,7 +173,7 @@ export default function LandingPage() {
 
                     <section
                         id="features"
-                        className="relative py-32 px-10 overflow-hidden bg-center bg-no-repeat"
+                        className="relative py-24 sm:py-32 px-4 sm:px-10 overflow-hidden bg-center bg-no-repeat"
                         style={{
                             backgroundImage: "url('/image copy 7.png')",
                             backgroundSize: "600px",
@@ -201,7 +192,7 @@ export default function LandingPage() {
                                     initial={{ opacity: 0, y: 40 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.7 }}
-                                    className="text-center text-5xl md:text-6xl font-bold mb-20 tracking-tight 
+                                    className="text-center text-4xl sm:text-5xl md:text-6xl font-bold mb-12 sm:mb-20 tracking-tight 
         bg-gradient-to-r from-slate-900 via-pink-500 to-rose-400 
         bg-clip-text text-transparent"
                                 >
@@ -210,7 +201,7 @@ export default function LandingPage() {
                             </Reveal>
 
                             {/* GRID */}
-                            <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
+                            <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
 
                                 {features.map((item, i) => (
                                     <motion.div
@@ -220,7 +211,7 @@ export default function LandingPage() {
                                         transition={{ delay: i * 0.15, duration: 0.6 }}
                                         whileHover={{ y: -12, scale: 1.02 }}
                                         className="bg-white/80 backdrop-blur-xl border border-white/20 
-          shadow-[0_20px_50px_rgba(0,0,0,0.08)] rounded-[32px] p-10"
+          shadow-[0_20px_50px_rgba(0,0,0,0.08)] rounded-[32px] p-6 sm:p-10"
                                     >
 
                                         {/* ICON */}
@@ -233,12 +224,12 @@ export default function LandingPage() {
                                         </motion.div>
 
                                         {/* TITLE */}
-                                        <h3 className="text-2xl font-bold mb-3">
+                                        <h3 className="text-xl sm:text-2xl font-bold mb-3">
                                             {item.title}
                                         </h3>
 
                                         {/* DESC */}
-                                        <p className="text-slate-500 leading-relaxed font-medium">
+                                        <p className="text-slate-500 leading-relaxed font-medium text-sm sm:text-base">
                                             {item.desc}
                                         </p>
 
@@ -249,13 +240,13 @@ export default function LandingPage() {
                         </div>
                     </section>
 
-                    <section id="Stats" className="py-32 relative bg-slate-900 text-white overflow-hidden">
+                    <section id="Stats" className="py-20 sm:py-32 relative bg-slate-900 text-white overflow-hidden px-4">
                         <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
                             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[150px]" />
                             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500 rounded-full blur-[150px]" />
                         </div>
 
-                        <div className="relative z-20 max-w-5xl mx-auto grid md:grid-cols-3 gap-12 text-center">
+                        <div className="relative z-20 max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 text-center">
                             {[
                                 { val: "100+", label: "Colleges" },
                                 { val: "50k+", label: "Matches" },
@@ -274,15 +265,16 @@ export default function LandingPage() {
                         </div>
                     </section>
 
-                    <footer id="Contact" className="bg-white border-t border-slate-100 p-12">
-                        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-12">
+                    <footer id="Contact" className="bg-white border-t border-slate-100 p-6 sm:p-12">
+                        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-10 sm:gap-12">
                             <div className="max-w-xs">
                                 <h2 className="text-3xl font-black italic text-pink-500 mb-4">Syntra.</h2>
                                 <p className="text-slate-500 font-medium">Making campus life a bit more romantic and a lot more connected.</p>
                             </div>
 
-                            <div className="p-8 bg-slate-50 rounded-[32px] border border-slate-100 flex-1 max-w-sm ml-auto">
+                            <div className="p-6 sm:p-8 bg-slate-50 rounded-[32px] border border-slate-100 w-full max-w-sm sm:ml-auto">
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Built by Hardik</p>
+
                                 <div className="flex flex-col gap-3 space-y-3">
                                     <a href="https://x.com/Silent_twt_" target="_blank"><motion.button whileHover={{ x: 5 }} className="w-full flex text-xl text-left font-bold text-slate-700 hover:text-pink-500 transition"><img src="image copy 5.png" className="w-10 mr-1" alt="" /><span className="mt-1">Twitter</span></motion.button></a>
                                     <a href="https://www.linkedin.com/in/hardik-garg-837665244/" target="_blank"><motion.button whileHover={{ x: 5 }} className="w-full text-xl flex gap-x-2 text-left font-bold text-slate-700 hover:text-pink-500 transition"><img src="image copy 3.png" className="w-10" alt="" /><span className="mt-2">LinkedIn</span></motion.button></a>

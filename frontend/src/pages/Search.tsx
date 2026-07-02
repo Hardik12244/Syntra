@@ -20,7 +20,7 @@ function Search() {
         withCredentials: true,
       })
       .then((res) => setUser(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function Search() {
 
         setSuggestions(res.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }, 250);
 
@@ -50,10 +50,8 @@ function Search() {
   };
 
   return (
-    <div className="w-full min-h-screen px-6 py-6">
-
+    <div className="w-full min-h-screen px-3 sm:px-6 py-6 overflow-x-hidden">
       <div className="max-w-3xl mx-auto relative">
-
         <motion.div
           animate={{
             scale: focused ? 1.01 : 1,
@@ -61,7 +59,6 @@ function Search() {
           transition={{ duration: 0.2 }}
           className="relative"
         >
-
           <input
             type="text"
             placeholder="Search people..."
@@ -74,7 +71,7 @@ function Search() {
                 handleSearch();
               }
             }}
-            className="w-full h-14 px-6 pr-14 rounded-3xl bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm outline-none text-[15px] transition focus:shadow-xl"
+            className="w-full h-12 sm:h-14 px-4 sm:px-6 pr-12 sm:pr-14 rounded-3xl bg-white/70 backdrop-blur-xl border border-gray-200 shadow-sm outline-none text-sm sm:text-[15px] transition focus:shadow-xl"
           />
 
           {query && (
@@ -84,12 +81,11 @@ function Search() {
                 setActiveSearch("");
                 setSuggestions([]);
               }}
-              className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition"
+              className="absolute right-4 sm:right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition"
             >
               ✕
             </button>
           )}
-
         </motion.div>
 
         <AnimatePresence>
@@ -99,49 +95,39 @@ function Search() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.98 }}
               transition={{ duration: 0.18 }}
-              className="absolute top-16 w-full bg-white/80 backdrop-blur-2xl border border-gray-200 rounded-3xl shadow-2xl overflow-hidden z-50"
+              className="absolute top-14 sm:top-16 w-full bg-white/80 backdrop-blur-2xl border border-gray-200 rounded-3xl shadow-2xl overflow-hidden z-50"
             >
-
               {suggestions.map((item: any) => (
                 <div
                   key={item._id}
                   onClick={() => navigate(`/profile/${item._id}`)}
-                  className="flex items-center gap-4 px-5 py-4 hover:bg-gray-100/70 transition cursor-pointer"
+                  className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 hover:bg-gray-100/70 transition cursor-pointer min-w-0"
                 >
-
                   <img
                     src={item.avatar}
                     alt=""
-                    className="w-11 h-11 rounded-full object-cover"
+                    className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover shrink-0"
                   />
 
-                  <div className="flex flex-col">
-
-                    <span className="text-sm font-medium text-gray-800">
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-sm font-medium text-gray-800 truncate">
                       {item.name}
                     </span>
 
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 truncate">
                       @{item.username}
                     </span>
-
                   </div>
-
                 </div>
               ))}
-
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
 
       <div className="mt-8">
-
         {activeSearch.trim() === "" ? (
-          <>
-            {user && <TrendingPosts userId={user._id} />}
-          </>
+          <>{user && <TrendingPosts userId={user._id} />}</>
         ) : (
           <>
             {user && (
@@ -152,9 +138,7 @@ function Search() {
             )}
           </>
         )}
-
       </div>
-
     </div>
   );
 }
