@@ -15,7 +15,7 @@ function Feed({ userId }: Props) {
   const [caption, setCaption] = useState<string>('');
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/post`)
+    axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post`)
       .then((res) => {
         setPosts(res.data);
       })
@@ -29,7 +29,7 @@ function Feed({ userId }: Props) {
     if (!file) return;
     formData.append('media', file);
 
-    axios.post(`${import.meta.env.VITE_API_URL}/post`, formData, {
+    axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post`, formData, {
       withCredentials: true,
     })
       .then(() => {
@@ -37,7 +37,7 @@ function Feed({ userId }: Props) {
         setCaption('');
         setFile(null);
 
-        axios.get(`${import.meta.env.VITE_API_URL}/post`)
+        axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post`)
           .then((res) => {
             setPosts(res.data);
           })

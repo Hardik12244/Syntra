@@ -17,7 +17,7 @@ function Messages({ user }: any) {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    socketRef.current = io(import.meta.env.VITE_API_URL, {
+    socketRef.current = io(import.meta.env.VITE_API_URL || "http://localhost:3000", {
       withCredentials: true,
     });
 
@@ -40,7 +40,7 @@ function Messages({ user }: any) {
     const fetchConversation = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/message/conversation`,
+          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/message/conversation`,
           {
             withCredentials: true,
           }
@@ -59,7 +59,7 @@ function Messages({ user }: any) {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/message/${chatUser._id}`,
+          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/message/${chatUser._id}`,
           {
             withCredentials: true,
           }

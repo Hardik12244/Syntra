@@ -13,7 +13,7 @@ function TrendingPosts({ userId }: TrendingPostsProps) {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/search/trending`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/search/trending`);
         setPosts(res.data);
       } catch {
         // ignore error

@@ -24,7 +24,7 @@ export default function ActivityCenter() {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_API_URL}/activity`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/activity`,
         {
           withCredentials: true,
         }

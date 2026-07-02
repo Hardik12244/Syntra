@@ -37,7 +37,7 @@ export default function PublicProfile({ currentUserId }: Props) {
       try {
         if (!id) return;
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/post/user/${id}`,
+          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post/user/${id}`,
           { withCredentials: true }
         );
         setPosts(response.data);
@@ -53,7 +53,7 @@ export default function PublicProfile({ currentUserId }: Props) {
     if (!id) return;
 
     axios
-      .get(`${import.meta.env.VITE_API_URL}/user/${id}`)
+      .get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user/${id}`)
       .then((res) => setUser(res.data))
       .catch(() => {});
   }, [id]);
@@ -64,7 +64,7 @@ export default function PublicProfile({ currentUserId }: Props) {
     const fetchCrushStatus = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/crush/status/${id}`,
+          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/crush/status/${id}`,
           { withCredentials: true }
         );
         setCrushed(res.data.crushed);
@@ -87,7 +87,7 @@ export default function PublicProfile({ currentUserId }: Props) {
   const handleCrush = async () => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/crush/toggle`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/crush/toggle`,
         { receiver: user._id },
         { withCredentials: true }
       );

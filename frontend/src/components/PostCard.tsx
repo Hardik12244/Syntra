@@ -17,19 +17,20 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
 
   const getMediaUrl = (media?: string) => {
     if (!media) return "";
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
     if (media.includes("localhost:3000")) {
-      return media.replace(/http:\/\/localhost:3000[\/\\]*/, `${import.meta.env.VITE_API_URL}/`);
+      return media.replace(/http:\/\/localhost:3000[\/\\]*/, `${apiUrl}/`);
     }
     if (media.startsWith("http://") || media.startsWith("https://") || media.startsWith("data:")) {
       return media;
     }
-    return `${import.meta.env.VITE_API_URL}/${media.replace(/^[\/\\]+/, "").replace(/\\/g, "/")}`;
+    return `${apiUrl}/${media.replace(/^[\/\\]+/, "").replace(/\\/g, "/")}`;
   };
 
   const handleComment = async () => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/post/${post._id}/comment`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post/${post._id}/comment`,
         { text: commentText },
         { withCredentials: true }
       );
@@ -50,7 +51,7 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
 
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/post/${post._id}/like`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post/${post._id}/like`,
         {},
         { withCredentials: true }
       );
@@ -62,7 +63,7 @@ export default function PostCard({ post, userId, setPosts }: PostCardProps) {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/post/delete/${post._id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/post/delete/${post._id}`, {
         withCredentials: true,
       });
       if (setPosts) {

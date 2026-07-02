@@ -53,7 +53,7 @@ export default function OnBoarding({ user, setUser }: any) {
       }
 
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/user/profile`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user/profile`,
         data,
         {
           withCredentials: true,

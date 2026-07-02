@@ -10,7 +10,7 @@ type Props = {
 export default function Navbar({ user, setUser, onToggleMenu }: Props) {
   async function handleLogout() {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/auth/logout`, {}, { withCredentials: true });
+      await axios.post(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/logout`, {}, { withCredentials: true });
     } catch {
       // ignore logout error
     }
@@ -51,7 +51,7 @@ export default function Navbar({ user, setUser, onToggleMenu }: Props) {
             onSuccess={(credentialResponse) => {
               const token = credentialResponse.credential;
               axios
-                .post(`${import.meta.env.VITE_API_URL}/auth/google`, {
+                .post(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/google`, {
                   token,
                 }, { withCredentials: true })
                 .then((res) => {

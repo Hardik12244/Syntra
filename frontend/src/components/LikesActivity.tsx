@@ -7,7 +7,7 @@ export default function LikesActivity() {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_API_URL}/activity/likes`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/activity/likes`,
         {
           withCredentials: true,
         }

@@ -83,7 +83,7 @@ export default function LandingPage() {
                                 onSuccess={async (credentialResponse) => {
                                     try {
                                         await axios.post(
-                                            `${import.meta.env.VITE_API_URL}/auth/google`,
+                                            `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/auth/google`,
                                             {
                                                 token: credentialResponse.credential,
                                             },

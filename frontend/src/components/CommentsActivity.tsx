@@ -8,7 +8,7 @@ export default function CommentsActivity() {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_API_URL}/activity/comments`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/activity/comments`,
         {
           withCredentials: true,
         }

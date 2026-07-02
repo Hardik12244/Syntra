@@ -31,10 +31,10 @@ export default function Connections() {
     const fetchConnections = async () => {
       try {
         const [crushRes, matchRes] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_API_URL}/crush/get`, {
+          axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/crush/get`, {
             withCredentials: true,
           }),
-          axios.get(`${import.meta.env.VITE_API_URL}/match/get`, {
+          axios.get(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/match/get`, {
             withCredentials: true,
           }),
         ]);
