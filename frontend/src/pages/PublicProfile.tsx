@@ -238,13 +238,7 @@ export default function PublicProfile({ currentUserId }: Props) {
                   alt=""
                 />
 
-                <div className="text-center mt-2">
-                  <p className="text-gray-500 text-sm">Followers</p>
-                  <p className="text-2xl font-bold">120</p>
-                  <button className="px-6 py-1.5 rounded-xl bg-red-400 text-white shadow hover:scale-105 transition mt-1">
-                    Follow
-                  </button>
-                </div>
+                
               </div>
 
               <div className="flex-1 w-full min-w-0 text-center md:text-left">
