@@ -31,7 +31,8 @@ export default function Profile({ user, setUser }: Props) {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const [showPosts, setShowPosts] = useState(false);
-
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -64,29 +65,55 @@ export default function Profile({ user, setUser }: Props) {
   };
 
   const handleSave = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const res = await axios.put(
-        `${API_URL}/user/profile`,
-        formData,
-        { withCredentials: true }
-      );
+    const data = new FormData();
 
-      setUser(res.data);
-      setFormData({
-        ...res.data,
-        dateOfBirth: res.data.dateOfBirth
-          ? res.data.dateOfBirth.split("T")[0]
-          : "",
-      });
-      setIsEditing(false);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "_id" || key === "avatar") return;
+
+      if (key === "interests" && Array.isArray(value)) {
+        value.forEach((interest) => {
+          data.append("interests", interest);
+        });
+      } else if (value !== undefined && value !== null) {
+        data.append(key, String(value));
+      }
+    });
+
+    if (avatarFile) {
+      data.append("avatar", avatarFile);
     }
-  };
+
+    const res = await axios.put(
+      `${API_URL}/user/profile`,
+      data,
+      {
+        withCredentials: true,
+      }
+    );
+
+    setUser(res.data);
+
+    setFormData({
+      ...res.data,
+      dateOfBirth: res.data.dateOfBirth
+        ? res.data.dateOfBirth.split("T")[0]
+        : "",
+    });
+
+    setAvatarFile(null);
+    setAvatarPreview(null);
+
+    setIsEditing(false);
+
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     if (!user) return;
@@ -125,16 +152,46 @@ export default function Profile({ user, setUser }: Props) {
             {/* LEFT */}
             <div className="flex flex-col items-center w-full md:w-[280px] shrink-0 text-center">
               <motion.div
-                whileHover={{ y: -3 }}
-                transition={{ duration: 0.2 }}
-                className="relative"
-              >
-                <img
-                  src={getMediaUrl(user?.avatar) || "https://via.placeholder.com/150"}
-                  className="w-28 h-28 sm:w-32 sm:h-32 rounded-[28px] object-cover shadow-xl border border-black/5"
-                  alt=""
-                />
-              </motion.div>
+  whileHover={{ y: -3 }}
+  transition={{ duration: 0.2 }}
+  className="relative"
+>
+  <img
+    src={
+      avatarPreview ||
+      getMediaUrl(user?.avatar) ||
+      "https://via.placeholder.com/150"
+    }
+    className="w-28 h-28 sm:w-32 sm:h-32 rounded-[28px] object-cover shadow-xl border border-black/5"
+    alt="Profile"
+  />
+
+  {isEditing && (
+    <>
+      <label
+        htmlFor="avatar-upload"
+        className="absolute -bottom-2 -right-2 w-9 h-9 rounded-full bg-black text-white flex items-center justify-center cursor-pointer shadow-lg hover:scale-105 transition"
+      >
+        +
+      </label>
+
+      <input
+        id="avatar-upload"
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+
+          if (!file) return;
+
+          setAvatarFile(file);
+          setAvatarPreview(URL.createObjectURL(file));
+        }}
+      />
+    </>
+  )}
+</motion.div>
 
               <h2 className="mt-5 text-xl sm:text-2xl font-semibold tracking-tight text-[#111] truncate max-w-full">
                 {user.name}

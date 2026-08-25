@@ -67,48 +67,78 @@ async function getUserByPhone(req: Request, res: Response) {
 async function updateProfile(req: Request, res: Response) {
     try {
         const userId = (req as any).user.id;
-        const { name, college, interests, gender, dateOfBirth, phoneNo } = req.body;
+
+        const {
+            name,
+            college,
+            interests,
+            gender,
+            dateOfBirth,
+            phoneNo
+        } = req.body;
 
         const updateData: any = {};
+
         if (req.file) {
             updateData.avatar = `uploads/${req.file.filename}`;
         }
-        if (name) updateData.name = name;
-        if (college) updateData.college = college;
-        if (gender) updateData.gender = gender;
-        if (phoneNo) updateData.phoneNo = phoneNo;
-        if (dateOfBirth) updateData.dateOfBirth = dateOfBirth;
 
-        if (Array.isArray(interests)) {
-            updateData.interests = interests;
+        if (name !== undefined) updateData.name = name;
+        if (college !== undefined) updateData.college = college;
+        if (gender !== undefined) updateData.gender = gender;
+        if (phoneNo !== undefined) updateData.phoneNo = phoneNo;
+        if (dateOfBirth !== undefined) updateData.dateOfBirth = dateOfBirth;
+
+        if (interests !== undefined) {
+            updateData.interests = Array.isArray(interests)
+                ? interests
+                : [interests];
         }
 
+        const existingUser = await User.findById(userId);
+
+        if (!existingUser) {
+            return res.status(404).json({
+                msg: "User not found"
+            });
+        }
+
+        const finalName = updateData.name ?? existingUser.name;
+        const finalCollege = updateData.college ?? existingUser.college;
+        const finalGender = updateData.gender ?? existingUser.gender;
+        const finalPhoneNo = updateData.phoneNo ?? existingUser.phoneNo;
+        const finalDateOfBirth =
+            updateData.dateOfBirth ?? existingUser.dateOfBirth;
+
+        const finalInterests =
+            updateData.interests ?? existingUser.interests;
+
         const isComplete = !!(
-            updateData.college &&
-            Array.isArray(updateData.interests) &&
-            updateData.interests.length > 0 &&
-            updateData.gender &&
-            updateData.dateOfBirth &&
-            updateData.name &&
-            updateData.phoneNo
+            finalName &&
+            finalCollege &&
+            finalGender &&
+            finalPhoneNo &&
+            finalDateOfBirth &&
+            Array.isArray(finalInterests) &&
+            finalInterests.length > 0
         );
 
         updateData.isProfileComplete = isComplete;
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
-            updateData,
+            { $set: updateData },
             { new: true }
         );
-
-        if (!updatedUser) {
-            return res.status(404).json({ msg: "User not found" });
-        }
 
         return res.status(200).json(updatedUser);
 
     } catch (error) {
-        return res.status(500).json({ msg: "Server error" });
+        console.error(error);
+
+        return res.status(500).json({
+            msg: "Server error"
+        });
     }
 }
 
