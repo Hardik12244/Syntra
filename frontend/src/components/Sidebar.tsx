@@ -77,8 +77,8 @@ export default function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
               <div className="pl-4 flex flex-col gap-2">
                 {[
                   { name: "Search", path: "/search" },
-                  { name: "Connections", path: "/matches", badge: "3" },
-                  { name: "Messages", path: "/messages", badge: "8" },
+                  { name: "Connections", path: "/matches"},
+                  { name: "Messages", path: "/messages"},
                 ].map((item) => (
                   <NavLink
                     key={item.name}
@@ -100,17 +100,7 @@ export default function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                         )}
                         <div className="relative z-10 flex items-center justify-between w-full">
                           <span>{item.name}</span>
-                          {item.badge && (
-                            <span
-                              className={`text-xs px-2 py-0.5 rounded-md ${
-                                item.name === "Connections"
-                                  ? "bg-pink-200 text-pink-700"
-                                  : "bg-green-200 text-green-700"
-                              }`}
-                            >
-                              {item.badge}
-                            </span>
-                          )}
+                          
                         </div>
                       </>
                     )}
