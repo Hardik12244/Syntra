@@ -54,6 +54,15 @@ app.use("/search", searchRoutes);
 app.use("/message", messageRoutes);
 app.use("/activity", activityRouter);
 
+// Global Error Handler
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error("Global Error Handler:", err);
+    res.status(500).json({
+        msg: err.message || "An unexpected error occurred",
+        error: err
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 
 async function connect() {

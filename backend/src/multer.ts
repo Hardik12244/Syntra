@@ -17,7 +17,6 @@ const storage = new CloudinaryStorage({
     return {
       folder: "syntra",
       resource_type: "auto",
-      allowed_formats: ["jpeg", "png", "jpg", "mp4", "webp"],
     };
   },
 });
