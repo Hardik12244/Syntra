@@ -15,33 +15,15 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
     return {
-      folder: "syntra_uploads",
-      resource_type: file.mimetype.startsWith("video/") ? "video" : "image",
+      folder: "syntra",
+      resource_type: "auto",
+      allowed_formats: ["jpeg", "png", "jpg", "mp4", "webp"],
     };
   },
 });
 
-const fileFilter = (req: any, file: any, cb: any) => {
-  const isImage = file.mimetype.startsWith("image/");
-  const isVideo = file.mimetype.startsWith("video/");
-  
-  if (isImage || isVideo) {
-    const size = parseInt(req.headers["content-length"] || "0");
-    if (isImage && size > 5 * 1024 * 1024) {
-      return cb(new Error("Image size must be less than 5MB"), false);
-    }
-    if (isVideo && size > 15 * 1024 * 1024) {
-      return cb(new Error("Video size must be less than 15MB"), false);
-    }
-    cb(null, true);
-  } else {
-    cb(new Error("Only images and videos allowed"), false);
-  }
-};
-
 export const upload = multer({
   storage,
-  fileFilter,
   limits: {
     fileSize: 15 * 1024 * 1024,
   },
