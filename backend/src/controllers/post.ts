@@ -17,7 +17,7 @@ async function createPost(req: Request, res: Response) {
         })
         res.status(201).json(post)
     } catch (error) {
-        res.status(500).json({ msg: "error aagya jiiii" })
+        res.status(500).json({ msg: "Internal server error" })
     }
 }
 

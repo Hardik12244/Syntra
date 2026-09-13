@@ -80,7 +80,7 @@ async function updateProfile(req: Request, res: Response) {
         const updateData: any = {};
 
         if (req.file) {
-            updateData.avatar = `uploads/${req.file.filename}`;
+            updateData.avatar = req.file.path;
         }
 
         if (name !== undefined) updateData.name = name;
