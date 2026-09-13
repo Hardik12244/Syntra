@@ -16,8 +16,9 @@ async function createPost(req: Request, res: Response) {
             mediaType
         })
         res.status(201).json(post)
-    } catch (error) {
-        res.status(500).json({ msg: "Internal server error" })
+    } catch (error: any) {
+        console.error("Error in createPost:", error);
+        res.status(500).json({ msg: error.message || "Internal server error", error })
     }
 }
 

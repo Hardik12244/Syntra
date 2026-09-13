@@ -13,7 +13,15 @@ postRouter.get('/user/:userId', authMiddleware, getSelfPosts)
 
 postRouter.post('/:id/like',authMiddleware, toggleLike)
 
-postRouter.post('/',authMiddleware,upload.single("media"),createPost)
+postRouter.post('/', authMiddleware, (req, res, next) => {
+    upload.single("media")(req, res, (err) => {
+        if (err) {
+            console.error("Multer/Cloudinary Error:", err);
+            return res.status(500).json({ msg: err.message || "File upload failed", error: err });
+        }
+        next();
+    });
+}, createPost)
 
 postRouter.patch('/:id',authMiddleware,updatePost)
 
