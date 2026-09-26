@@ -14,6 +14,8 @@ function Feed({ userId }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [caption, setCaption] = useState<string>('');
+  const [uploadError, setUploadError] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     axios.get(`${API_URL}/post`)
@@ -23,28 +25,41 @@ function Feed({ userId }: Props) {
       .catch((err) => console.error(err));
   }, []);
 
-  function addPost() {
+  async function addPost() {
+    if (!file) {
+      setUploadError('Choose a photo or video to upload.');
+      return;
+    }
+
+    if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+      setUploadError('Only image and video files are supported.');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('user', userId);
     formData.append('caption', caption);
-    if (!file) return;
     formData.append('media', file);
 
-    axios.post(`${API_URL}/post`, formData, {
-      withCredentials: true,
-    })
-      .then(() => {
-        setIsOpen(false);
-        setCaption('');
-        setFile(null);
+    try {
+      setIsUploading(true);
+      setUploadError('');
+      await axios.post(`${API_URL}/post`, formData, { withCredentials: true });
+      setIsOpen(false);
+      setCaption('');
+      setFile(null);
 
-        axios.get(`${API_URL}/post`)
-          .then((res) => {
-            setPosts(res.data);
-          })
-          .catch((err) => console.error(err));
-      })
-      .catch((err) => console.error(err));
+      const response = await axios.get(`${API_URL}/post`);
+      setPosts(response.data);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setUploadError(err.response?.data?.msg || 'Upload failed. Please try again.');
+      } else {
+        setUploadError('Upload failed. Please try again.');
+      }
+    } finally {
+      setIsUploading(false);
+    }
   }
 
   return (
@@ -54,7 +69,10 @@ function Feed({ userId }: Props) {
           <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-lg w-full max-w-xs sm:max-w-sm">
             <button
               className="ml-auto block mb-4 text-gray-500 hover:text-black"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                setUploadError('');
+              }}
             >
               ✕
             </button>
@@ -62,14 +80,21 @@ function Feed({ userId }: Props) {
             <div className="flex flex-col gap-4">
               <input
                 type="file"
+                accept="image/*,video/*"
                 onChange={(e) => {
                   const files = e.target.files;
                   if (files && files.length > 0) {
                     setFile(files[0]);
+                    setUploadError('');
                   }
                 }}
                 className="bg-gray-100 rounded-lg p-2 text-xs sm:text-sm w-full"
               />
+
+              <p className="-mt-2 text-xs text-gray-500">
+                Photos and videos up to 100 MB are supported.
+                {file && ` Selected: ${file.name}`}
+              </p>
 
               <input
                 type="text"
@@ -79,11 +104,14 @@ function Feed({ userId }: Props) {
                 className="bg-gray-100 rounded-lg p-2 text-sm w-full outline-none focus:ring-2 focus:ring-pink-400"
               />
 
+              {uploadError && <p className="text-sm text-red-600">{uploadError}</p>}
+
               <button
                 onClick={addPost}
+                disabled={isUploading}
                 className="bg-gradient-to-r from-pink-500 to-purple-500 text-white py-2 rounded-lg hover:opacity-90 font-medium transition"
               >
-                Upload
+                {isUploading ? 'Uploading…' : 'Upload'}
               </button>
             </div>
           </div>
@@ -124,4 +152,3 @@ function Feed({ userId }: Props) {
 }
 
 export default Feed;
-

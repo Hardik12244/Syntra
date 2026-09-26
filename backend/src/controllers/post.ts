@@ -1,27 +1,44 @@
 import Post from "../models/post";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import { uploadToSupabase } from "../utils/uploadToSupabase";
+
 
 async function createPost(req: Request, res: Response) {
     try {
-        const { user, caption, image } = req.body;
-        const media = req.file?.path;
-        const mediaType = req.file?.mimetype;
+        const { user, caption } = req.body;
 
-        if (!user || !caption) return res.status(400).json({ msg: "caption required" });
+        if (!user || !caption) {
+            return res.status(400).json({
+                msg: "caption required"
+            });
+        }
+
+        let media = "";
+        let mediaType = "";
+
+        if (req.file) {
+            media = await uploadToSupabase(req.file, "posts");
+            mediaType = req.file.mimetype;
+        }
+
         const post = await Post.create({
             user,
             caption,
             media,
             mediaType
-        })
-        res.status(201).json(post)
+        });
+
+        res.status(201).json(post);
+
     } catch (error: any) {
         console.error("Error in createPost:", error);
-        res.status(500).json({ msg: error.message || "Internal server error", error })
+
+        res.status(500).json({
+            msg: error.message || "Internal server error"
+        });
     }
 }
-
 async function getPost(req: Request, res: Response) {
     try {
         const id = req.params.id;

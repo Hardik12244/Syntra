@@ -14,6 +14,7 @@ import messageRoutes from "./routes/message"
 import activityRouter from "./routes/activity";
 import { initSocket } from "./socket/socket";
 import cors from "cors";
+import multer from "multer";
 
 dotenv.config();
 
@@ -44,7 +45,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+// app.use("/uploads", express.static("uploads"));
 app.use('/user', userRoutes);
 app.use('/post', postRoutes);
 app.use("/crush", crushRoutes);
@@ -57,6 +58,12 @@ app.use("/activity", activityRouter);
 // Global Error Handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.error("Global Error Handler:", err);
+    if (err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE") {
+        return res.status(413).json({ msg: "Video or image must be 100 MB or smaller" });
+    }
+    if (err?.message === "Only images and videos allowed") {
+        return res.status(400).json({ msg: err.message });
+    }
     res.status(500).json({
         msg: err.message || "An unexpected error occurred",
         error: err
@@ -81,5 +88,4 @@ async function connect() {
 
 }
 connect();
-
 
